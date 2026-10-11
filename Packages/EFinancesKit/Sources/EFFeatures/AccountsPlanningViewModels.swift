@@ -39,12 +39,12 @@ public final class AccountsViewModel {
     public init(app: AppModel) { self.app = app }
 
     public func load() async {
-        async let conns = app.repos.openFinance.connections()
-        async let subs = app.repos.transactions.subscriptions()
-        async let ws = app.repos.workspaces.refresh()
-        let c = await conns
-        let s = await subs.value
-        let w = await ws.value ?? app.workspace
+        let conns = Task { await self.app.repos.openFinance.connections() }
+        let subs = Task { await self.app.repos.transactions.subscriptions() }
+        let ws = Task { await self.app.repos.workspaces.refresh() }
+        let c = await conns.value
+        let s = await subs.value.value
+        let w = await ws.value.value ?? app.workspace
         state = state.keeping(c.map { AccountsData(connections: $0, subscriptions: s, workspace: w, now: app.clock.localNow()) })
     }
 
@@ -150,9 +150,9 @@ public final class BankAccountViewModel {
         guard let (conn, acc) = pairs.first(where: { $0.1.id == accountId }) ?? pairs.first else { state = .failed(.notFound); return }
         let end = app.clock.today()
         let start = end.minusDays(days)
-        async let s = app.repos.openFinance.accountSummary(acc.id, start: start, end: end)
-        async let t = app.repos.openFinance.accountTransactions(acc.id, start: start, end: end)
-        state = .ready(BankAccountData(connection: conn, account: acc, siblings: pairs, summary: await s.value, transactions: await t.value ?? []))
+        let s = Task { await self.app.repos.openFinance.accountSummary(acc.id, start: start, end: end) }
+        let t = Task { await self.app.repos.openFinance.accountTransactions(acc.id, start: start, end: end) }
+        state = .ready(BankAccountData(connection: conn, account: acc, siblings: pairs, summary: await s.value.value, transactions: await t.value.value ?? []))
     }
 
     /// Abre a conta do e-Finances que espelha esta (em Transações dá para organizar os lançamentos).
@@ -211,15 +211,15 @@ public final class PlanningViewModel {
 
     public func load() async {
         let month = app.clock.currentMonth()
-        async let l = app.repos.planning.limits(month)
-        async let li = app.repos.transactions.installments()
-        async let oi = app.repos.openFinance.installments()
-        async let s = app.repos.transactions.subscriptions()
-        async let c = app.repos.transactions.categories()
-        let limits = await l
+        let l = Task { await self.app.repos.planning.limits(month) }
+        let li = Task { await self.app.repos.transactions.installments() }
+        let oi = Task { await self.app.repos.openFinance.installments() }
+        let s = Task { await self.app.repos.transactions.subscriptions() }
+        let c = Task { await self.app.repos.transactions.categories() }
+        let limits = await l.value
         if case .failure(let e) = limits, state.value == nil { state = .failed(e); return }
-        let data = PlanningData(month: month, limits: limits.value, installments: (await li.value?.items ?? []) + (await oi.value?.items ?? []),
-                                subscriptions: await s.value, categories: await c.value ?? [])
+        let data = PlanningData(month: month, limits: limits.value, installments: (await li.value.value?.items ?? []) + (await oi.value.value?.items ?? []),
+                                subscriptions: await s.value.value, categories: await c.value.value ?? [])
         state = .ready(withoutHidden(data))
     }
 

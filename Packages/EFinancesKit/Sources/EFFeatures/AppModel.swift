@@ -214,14 +214,14 @@ public final class AppModel {
     }
 
     private func afterLogin(showStory: Bool) async {
-        async let ws = repos.workspaces.refresh()
-        async let p = repos.users.profile()
-        async let n = repos.notifications.list(unreadOnly: true)
-        async let st = repos.stories.pending()
-        if let w = await ws.value { workspace = w }
-        profile = await p.value
-        unread = await n.value?.unread ?? unread
-        if showStory, let story = await st.value ?? nil { pendingStory = story } else { _ = await st }
+        let ws = Task { await self.repos.workspaces.refresh() }
+        let p = Task { await self.repos.users.profile() }
+        let n = Task { await self.repos.notifications.list(unreadOnly: true) }
+        let st = Task { await self.repos.stories.pending() }
+        if let w = await ws.value.value { workspace = w }
+        profile = await p.value.value
+        unread = await n.value.value?.unread ?? unread
+        if showStory, let story = await st.value.value ?? nil { pendingStory = story } else { _ = await st.value }
     }
 
     public func logout() async {

@@ -87,12 +87,12 @@ public final class TransactionsViewModel {
     }
 
     public func loadExtras() async {
-        async let limit = app.repos.transactions.recurrenceLimit()
-        async let cats = app.repos.transactions.categories()
-        async let inst = app.repos.transactions.installments()
-        if let l = await limit.value { recurrenceLimit = l }
-        if let c = await cats.value { categories = c }
-        if let i = await inst.value {
+        let limit = Task { await self.app.repos.transactions.recurrenceLimit() }
+        let cats = Task { await self.app.repos.transactions.categories() }
+        let inst = Task { await self.app.repos.transactions.installments() }
+        if let l = await limit.value.value { recurrenceLimit = l }
+        if let c = await cats.value.value { categories = c }
+        if let i = await inst.value.value {
             let ledger = i.items.filter { $0.source == .ledger }
             installmentsCount = ledger.count
             installmentsMonthly = ledger.reduce(0) { $0 + $1.amount }
@@ -313,12 +313,12 @@ public final class TransactionFormViewModel {
     }
 
     public func load() async {
-        async let cats = app.repos.transactions.categories()
-        async let contacts = app.repos.transactions.contacts()
-        async let centers = app.repos.transactions.costCenters()
-        categories = await cats.value ?? []
-        self.contacts = await contacts.value ?? []
-        costCenters = await centers.value ?? []
+        let cats = Task { await self.app.repos.transactions.categories() }
+        let contacts = Task { await self.app.repos.transactions.contacts() }
+        let centers = Task { await self.app.repos.transactions.costCenters() }
+        categories = await cats.value.value ?? []
+        self.contacts = await contacts.value.value ?? []
+        costCenters = await centers.value.value ?? []
         guard let id = editId else { return }
         switch await app.repos.transactions.get(id, month: month) {
         case .success(let t):

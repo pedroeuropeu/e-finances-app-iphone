@@ -59,38 +59,38 @@ public final class HomeViewModel {
         let repos = app.repos
         let today = app.clock.today()
         let month = today.yearMonth
-        async let ws = repos.workspaces.refresh()
-        async let tx = repos.transactions.month(month)
-        async let limits = repos.planning.limits(month)
-        async let ledgerInst = repos.transactions.installments()
-        async let ofInst = repos.openFinance.installments()
-        async let conns = repos.openFinance.connections()
-        async let story = repos.stories.pending()
-        async let flow = repos.planning.yearFlow(month.year)
-        async let subs = repos.transactions.subscriptions()
+        let ws = Task { await repos.workspaces.refresh() }
+        let tx = Task { await repos.transactions.month(month) }
+        let limits = Task { await repos.planning.limits(month) }
+        let ledgerInst = Task { await repos.transactions.installments() }
+        let ofInst = Task { await repos.openFinance.installments() }
+        let conns = Task { await repos.openFinance.connections() }
+        let story = Task { await repos.stories.pending() }
+        let flow = Task { await repos.planning.yearFlow(month.year) }
+        let subs = Task { await repos.transactions.subscriptions() }
 
         let w: Workspace
-        switch await ws { case .success(let v): w = v; case .failure(let e): return .failure(e) }
+        switch await ws.value { case .success(let v): w = v; case .failure(let e): return .failure(e) }
         let list: [Transaction]
-        switch await tx { case .success(let v): list = v; case .failure(let e): return .failure(e) }
+        switch await tx.value { case .success(let v): list = v; case .failure(let e): return .failure(e) }
         let totals = list.totals()
         let account = w.account
         let balance = account?.balance ?? 0
-        let li = await ledgerInst.value?.items ?? []
-        let oi = await ofInst.value?.items ?? []
+        let li = await ledgerInst.value.value?.items ?? []
+        let oi = await ofInst.value.value?.items ?? []
         return .success(HomeData(
             workspace: w, today: today, month: month, totals: totals, balance: balance, currency: account?.currency ?? "BRL",
             forecast: forecast(balance: balance, totals: totals),
             late: list.filter { $0.dueStatus(today: today).isLate },
             soon: list.filter { $0.dueStatus(today: today).isSoon },
             categories: list.expensesByCategory(),
-            limits: await limits.value,
+            limits: await limits.value.value,
             installments: li + oi,
-            connections: await conns.value ?? [],
-            story: await story.value ?? nil,
-            yearFlow: await flow.value ?? [],
+            connections: await conns.value.value ?? [],
+            story: await story.value.value ?? nil,
+            yearFlow: await flow.value.value ?? [],
             monthTransactions: list,
-            subscriptions: await subs.value
+            subscriptions: await subs.value.value
         ))
     }
 

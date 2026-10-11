@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       # o app usa o visual do iOS 26 (Liquid Glass): precisa do Xcode 26 ou mais novo
       - uses: maxim-lobanov/setup-xcode@v1
         with:

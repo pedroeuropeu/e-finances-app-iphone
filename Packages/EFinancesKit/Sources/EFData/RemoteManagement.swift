@@ -39,13 +39,13 @@ public actor RemoteRegistryRepository: RegistryRepository {
 
     public func contactDebts() async -> Outcome<ContactDebts> {
         let start = "01/01/1990", end = DateFormats.api(clock.today().plusYears(10))
-        async let owes: Outcome<[ContactDebtDTO]> = api.call(.get, "api/transaction/find-analise-dividas-contatos", query: [("transactionType", "RECEBIMENTO"), ("dtStart", start), ("dtEnd", end), ("onlyOpen", "true")])
-        async let iOwe: Outcome<[ContactDebtDTO]> = api.call(.get, "api/transaction/find-analise-dividas-contatos", query: [("transactionType", "DESPESAS"), ("dtStart", start), ("dtEnd", end), ("onlyOpen", "true")])
+        let owes = Task { () -> Outcome<[ContactDebtDTO]> in await self.api.call(.get, "api/transaction/find-analise-dividas-contatos", query: [("transactionType", "RECEBIMENTO"), ("dtStart", start), ("dtEnd", end), ("onlyOpen", "true")]) }
+        let iOwe = Task { () -> Outcome<[ContactDebtDTO]> in await self.api.call(.get, "api/transaction/find-analise-dividas-contatos", query: [("transactionType", "DESPESAS"), ("dtStart", start), ("dtEnd", end), ("onlyOpen", "true")]) }
         func map(_ l: [ContactDebtDTO]) -> [ContactDebt] {
             l.compactMap { d in d.contactId.map { ContactDebt(contactId: $0, contactName: d.contactName ?? "", value: money(d.value).magnitude) } }
                 .filter { $0.value > 0 }.sorted { $0.value > $1.value }
         }
-        let (a, b) = await (owes, iOwe)
+        let (a, b) = await (owes.value, iOwe.value)
         switch (a, b) {
         case (.success(let x), .success(let y)): return .success(ContactDebts(owesMe: map(x), iOwe: map(y)))
         case (.failure(let e), _), (_, .failure(let e)): return .failure(e)
@@ -159,10 +159,10 @@ public final class RemoteBillingRepository: BillingRepository {
 
     public func overview() async -> Outcome<BillingOverview> {
         guard let email = storage.load()?.email else { return .failure(.unauthorized) }
-        async let user: Outcome<UserDTO> = api.call(.get, "api/users/findByEmail", query: [("email", email)])
-        async let storage: Outcome<StorageDTO> = api.call(.get, "api/plan/receipt/size-used")
-        async let invoices: Outcome<PageDTO<InvoiceDTO>> = api.call(.get, "api/invoice/find", query: [("page", "0"), ("size", "50"), ("sort", "id,desc")])
-        let (u, s, i) = await (user, storage, invoices)
+        let user = Task { () -> Outcome<UserDTO> in await self.api.call(.get, "api/users/findByEmail", query: [("email", email)]) }
+        let storage = Task { () -> Outcome<StorageDTO> in await self.api.call(.get, "api/plan/receipt/size-used") }
+        let invoices = Task { () -> Outcome<PageDTO<InvoiceDTO>> in await self.api.call(.get, "api/invoice/find", query: [("page", "0"), ("size", "50"), ("sort", "id,desc")]) }
+        let (u, s, i) = await (user.value, storage.value, invoices.value)
         guard case .success(let dto) = u else { return .failure(u.error ?? .serverDefault) }
         let up = dto.userPlan
         let free = up?.subscriptionType == nil || up?.subscriptionType == "FREE_PERIOD"

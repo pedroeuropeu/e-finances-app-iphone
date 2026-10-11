@@ -28,10 +28,10 @@ public final class ContactsViewModel {
     }
 
     public func load() async {
-        async let c = app.repos.registry.contacts(nil)
-        async let d = app.repos.registry.contactDebts()
-        let contacts = await c
-        let debts = await d.value
+        let c = Task { await self.app.repos.registry.contacts(nil) }
+        let d = Task { await self.app.repos.registry.contactDebts() }
+        let contacts = await c.value
+        let debts = await d.value.value
         state = state.keeping(contacts.map { ContactsData(contacts: $0, debts: debts) })
     }
 
@@ -152,12 +152,12 @@ public final class CategoriesViewModel {
 
     public func load() async {
         let m = month
-        async let o = app.repos.registry.categoryOverview(m)
-        async let s = app.repos.transactions.subscriptions()
-        let r = await o
+        let o = Task { await self.app.repos.registry.categoryOverview(m) }
+        let s = Task { await self.app.repos.transactions.subscriptions() }
+        let r = await o.value
         guard m == month else { return }
         state = state.keeping(r)
-        subscriptions = await s.value ?? subscriptions
+        subscriptions = await s.value.value ?? subscriptions
     }
 
     public func changeMonth(_ delta: Int) async { month = month.plusMonths(delta); state = .loading; await load() }
@@ -231,10 +231,10 @@ public final class CostCentersViewModel {
 
     public func load() async {
         let m = month
-        async let c = app.repos.registry.costCenters()
-        async let u = app.repos.registry.costCenterUsage(start: m.firstDay, end: m.lastDay)
-        let centers = await c
-        let usage = Dictionary((await u.value ?? []).map { ($0.costCenterId, $0) }, uniquingKeysWith: { a, _ in a })
+        let c = Task { await self.app.repos.registry.costCenters() }
+        let u = Task { await self.app.repos.registry.costCenterUsage(start: m.firstDay, end: m.lastDay) }
+        let centers = await c.value
+        let usage = Dictionary((await u.value.value ?? []).map { ($0.costCenterId, $0) }, uniquingKeysWith: { a, _ in a })
         guard m == month else { return }
         state = state.keeping(centers.map { CostCentersData(centers: $0, usage: usage) })
     }
@@ -334,10 +334,10 @@ public final class SupportViewModel {
 
     public func load() async {
         let g = group
-        async let t = app.repos.support.tickets(g)
-        async let c = app.repos.support.counts()
-        let r = await t
-        if let cc = await c.value { counts = cc }
+        let t = Task { await self.app.repos.support.tickets(g) }
+        let c = Task { await self.app.repos.support.counts() }
+        let r = await t.value
+        if let cc = await c.value.value { counts = cc }
         guard g == group else { return }
         tickets = tickets.keeping(r)
     }
