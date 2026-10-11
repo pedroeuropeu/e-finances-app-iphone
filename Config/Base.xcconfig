@@ -1,0 +1,12 @@
+// Comum aos três ambientes. Em .xcconfig "//" é comentário: os endereços usam "https:/$()/" para não serem cortados.
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 1
+IPHONEOS_DEPLOYMENT_TARGET = 17.0
+TARGETED_DEVICE_FAMILY = 1
+SWIFT_VERSION = 6.0
+INFOPLIST_FILE = App/Info.plist
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor
+ENABLE_USER_SCRIPT_SANDBOXING = YES
+// Time de assinatura: defina em Config/Signing.xcconfig (fora do git) ou no Xcode, em Signing & Capabilities.
+#include? "Signing.xcconfig"

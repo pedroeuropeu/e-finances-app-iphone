@@ -1,0 +1,69 @@
+# Projeto do Xcode gerado pelo XcodeGen (scripts/xcode.sh). Não edite o .xcodeproj à mão: mude aqui e gere de novo.
+name: EFinances
+options:
+  bundleIdPrefix: top.efinances
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: pt-BR
+  createIntermediateGroups: true
+configs:
+  Demo: debug
+  Local: debug
+  Release: release
+packages:
+  EFinancesKit:
+    path: Packages/EFinancesKit
+targets:
+  EFinances:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+    configFiles:
+      Demo: Config/Demo.xcconfig
+      Local: Config/Local.xcconfig
+      Release: Config/Prod.xcconfig
+    dependencies:
+      - package: EFinancesKit
+        product: EFCore
+      - package: EFinancesKit
+        product: EFData
+      - package: EFinancesKit
+        product: EFFeatures
+      - package: EFinancesKit
+        product: EFUI
+    settings:
+      base:
+        PRODUCT_NAME: EFinances
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_STRICT_CONCURRENCY: complete
+schemes:
+  EFinances Demo:
+    build:
+      targets:
+        EFinances: all
+    run:
+      config: Demo
+    test:
+      config: Demo
+      gatherCoverageData: true
+    archive:
+      config: Demo
+  EFinances Local:
+    build:
+      targets:
+        EFinances: all
+    run:
+      config: Local
+    archive:
+      config: Local
+  EFinances:
+    build:
+      targets:
+        EFinances: all
+    run:
+      config: Release
+    profile:
+      config: Release
+    archive:
+      config: Release

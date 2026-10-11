@@ -1,0 +1,9 @@
+// Modo demonstração: dados de exemplo, sem servidor (qualquer senha entra). Útil para testar e para a revisão da Apple.
+#include "Base.xcconfig"
+PRODUCT_BUNDLE_IDENTIFIER = top.efinances.app.demo
+EF_DISPLAY_NAME = e-Finances Demo
+EF_DEMO = YES
+EF_ENV_LABEL = Demonstração
+EF_API_BASE_URL = https:/$()/efinances.top/
+EF_TOKEN_URL = https:/$()/efinances.top/auth/realms/finances-realm/protocol/openid-connect/token
+EF_WEB_URL = https:/$()/efinances.top/

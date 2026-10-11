@@ -1,0 +1,3 @@
+// Copie para Config/Signing.xcconfig (ignorado pelo git) e coloque o Team ID da sua conta Apple Developer.
+DEVELOPMENT_TEAM = ABCDE12345
+CODE_SIGN_STYLE = Automatic

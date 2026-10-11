@@ -1,0 +1,26 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.moved-aside
+# Swift Package Manager
+.build/
+.swiftpm/
+# Assinatura e segredos (nunca no git)
+*.p12
+*.mobileprovision
+*.cer
+AuthKey_*.p8
+Secrets.xcconfig
+# macOS
+.DS_Store
+# Saídas locais
+dist/
+
+# assinatura (Team ID da conta Apple Developer): fica só na máquina
+Config/Signing.xcconfig
+
+# projeto do Xcode: gerado do project.yml (scripts/xcode.sh)
+EFinances.xcodeproj/

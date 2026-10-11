@@ -1,0 +1,9 @@
+// Produção (o que vai para a App Store).
+#include "Base.xcconfig"
+PRODUCT_BUNDLE_IDENTIFIER = top.efinances.app
+EF_DISPLAY_NAME = e-Finances
+EF_DEMO = NO
+EF_ENV_LABEL =
+EF_API_BASE_URL = https:/$()/efinances.top/
+EF_TOKEN_URL = https:/$()/efinances.top/auth/realms/finances-realm/protocol/openid-connect/token
+EF_WEB_URL = https:/$()/efinances.top/

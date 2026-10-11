@@ -1,0 +1,307 @@
+{
+ "topics": [
+  {
+   "id": "inicio",
+   "label": "Primeiros passos",
+   "description": "Painel, empresas e contas"
+  },
+  {
+   "id": "transacoes",
+   "label": "Transações",
+   "description": "Lançar, pagar, importar e exportar"
+  },
+  {
+   "id": "bancos",
+   "label": "Bancos e moedas",
+   "description": "Bancos conectados e moedas"
+  },
+  {
+   "id": "relatorios",
+   "label": "Relatórios",
+   "description": "Análises, gráficos e exportação"
+  },
+  {
+   "id": "cadastros",
+   "label": "Cadastros",
+   "description": "Contatos, categorias e centros de custo"
+  },
+  {
+   "id": "recibos",
+   "label": "Recibos",
+   "description": "Modelos e emissão de recibos"
+  },
+  {
+   "id": "conta",
+   "label": "Minha conta",
+   "description": "Usuários, notificações e dados"
+  },
+  {
+   "id": "plano",
+   "label": "Plano e cobrança",
+   "description": "Plano, faturas e impostos"
+  },
+  {
+   "id": "suporte",
+   "label": "Suporte",
+   "description": "Chamados e respostas"
+  }
+ ],
+ "articles": [
+  {
+   "id": "dashboard",
+   "topic": "inicio",
+   "title": "O que aparece no Painel?",
+   "body": [
+    "No topo ficam o saldo da conta em uso, as receitas e as despesas do mês (com o percentual do que estava previsto) e a previsão de fechamento do mês, considerando que tudo o que está previsto seja pago e recebido.",
+    "Se houver contas atrasadas ou vencendo na semana, um alerta aparece logo abaixo do cabeçalho com o atalho para Transações.",
+    "A Agenda marca nos dias as despesas, os recebimentos e os aniversários dos contatos. Clique num dia para ver os lançamentos dele. Mais abaixo estão o fluxo de caixa do ano e o previsto × realizado do mês."
+   ],
+   "keywords": "dashboard inicio painel saldo agenda previsao fluxo de caixa"
+  },
+  {
+   "id": "empresa-contas",
+   "topic": "inicio",
+   "title": "Como troco de empresa ou de conta?",
+   "body": [
+    "Cada empresa pode ter várias contas (banco, carteira, caixa…). A empresa e a conta escolhidas no seletor do topo da tela valem para tudo que envolve lançamentos: Painel, Transações, Relatórios e Centro de custo.",
+    "Ao conectar um banco (Open Finance), as contas dele entram na empresa que você escolher e aparecem no seletor com o logo do banco. Nelas os lançamentos chegam sozinhos: valores, datas e situação seguem o banco, e você organiza categoria, contato e o resto."
+   ],
+   "steps": [
+    "Clique no seletor no topo da tela, ao lado da sua foto (mostra a empresa e a conta em uso).",
+    "Escolha a conta dentro da empresa desejada: a tela aberta é atualizada na hora.",
+    "Para cadastrar empresas ou contas, use \"Gerenciar empresas e contas\" no mesmo painel e escolha a moeda da conta."
+   ],
+   "keywords": "empresa conta padrao trocar conta seletor topo contexto mudar empresa"
+  },
+  {
+   "id": "criar-transacao",
+   "topic": "transacoes",
+   "title": "Como lanço uma transação?",
+   "body": [
+    "Há dois jeitos. A adição rápida, na linha logo acima da lista, serve para lançar em segundos: preencha data, descrição, contato e valor e aperte Enter.",
+    "O botão \"Novo lançamento\" abre a gaveta com todos os campos: tipo, valor, datas, categoria, centro de custo, contato, forma de pagamento, detalhes e comprovantes."
+   ],
+   "keywords": "novo lancamento criar despesa receita adicionar rapida"
+  },
+  {
+   "id": "pagar",
+   "topic": "transacoes",
+   "title": "Como marco um lançamento como pago ou recebido?",
+   "body": [
+    "Na lista de Transações, use o botão \"Pagar\" (ou \"Receber\") no fim da linha. Para vários de uma vez, selecione as caixas à esquerda e use \"Marcar como pagas\" na barra que aparece embaixo.",
+    "Os filtros Pendentes, Atrasadas e Pagas ajudam a achar o que falta."
+   ],
+   "keywords": "pago pagar receber baixa quitar atrasada pendente"
+  },
+  {
+   "id": "excluir-varias",
+   "topic": "transacoes",
+   "title": "Como apago várias transações de uma vez?",
+   "body": [],
+   "steps": [
+    "Em Transações, marque as caixas das linhas que quer apagar.",
+    "Na barra que aparece embaixo, clique em \"Excluir\" e confirme."
+   ],
+   "note": [
+    "Na mesma barra dá para marcar tudo como pago ou trocar a categoria de todas as selecionadas. Para apagar só uma, abra o lançamento e use \"Excluir\" na gaveta."
+   ],
+   "keywords": "apagar excluir varias em massa lote selecionar"
+  },
+  {
+   "id": "importar",
+   "topic": "transacoes",
+   "title": "Como importo transações de outro sistema?",
+   "body": [],
+   "steps": [
+    "Em Transações, clique em \"Importar\".",
+    "Baixe o modelo de planilha e preencha com os seus lançamentos (ou use o seu arquivo no mesmo formato).",
+    "Envie o arquivo Excel (.xlsx ou .xls), confira a pré-visualização e confirme."
+   ],
+   "note": [
+    "As importações anteriores ficam no histórico da própria janela de importação. Para acompanhar os lançamentos direto do banco, veja \"Bancos conectados\"."
+   ],
+   "keywords": "importar planilha excel xlsx xls modelo migrar"
+  },
+  {
+   "id": "exportar",
+   "topic": "transacoes",
+   "title": "Como exporto minhas transações?",
+   "body": [
+    "Em Transações, clique em \"Exportar\" e escolha o período: o arquivo sai em Excel (.xlsx). Nos Relatórios, a tabela de detalhamento também exporta em CSV."
+   ],
+   "keywords": "exportar excel xlsx baixar planilha backup"
+  },
+  {
+   "id": "comprovantes",
+   "topic": "transacoes",
+   "title": "Posso anexar comprovantes às transações?",
+   "body": [
+    "Sim. Abra o lançamento e, na gaveta, anexe o arquivo: PDF, PNG ou JPEG, com até 10 MB cada e até 2 por lançamento.",
+    "O espaço usado pelos comprovantes aparece no menu lateral, embaixo do seu nome."
+   ],
+   "keywords": "comprovante anexo arquivo nota pdf imagem upload"
+  },
+  {
+   "id": "limite",
+   "topic": "transacoes",
+   "title": "Há um limite de transações?",
+   "body": [
+    "Não há limite de quantidade de lançamentos. O que tem limite é o espaço para comprovantes, mostrado no menu lateral."
+   ],
+   "keywords": "limite quantidade maximo transacoes"
+  },
+  {
+   "id": "open-finance",
+   "topic": "bancos",
+   "title": "Como conecto o meu banco?",
+   "body": [
+    "Em Bancos conectados, clique em \"Conectar meu banco\". A conexão é feita pelo Open Finance, regulado pelo Banco Central, que faz a ponte entre o seu banco e o e-Finances.",
+    "Você escolhe a instituição e autoriza o compartilhamento no app ou site oficial do banco, como manda o Open Finance do Banco Central. Depois disso, saldos e lançamentos aparecem na tela, categorizados.",
+    "Antes de abrir o banco, o e-Finances pergunta de qual empresa é a conta: cada conta do banco vira uma conta do sistema nessa empresa, com os lançamentos em Transações. Nelas não se cria lançamento nem se muda valor, data ou situação (vêm do banco); descrição, contato, categoria, centro de custo, comprovantes e observações você ajusta à vontade.",
+    "Ao desconectar, você escolhe quais contas saem (as outras continuam recebendo do banco) e o que acontece com elas no sistema: ficam só para consulta (congeladas) ou são apagadas junto com os lançamentos."
+   ],
+   "keywords": "open finance banco conectar nubank itau bradesco cartao"
+  },
+  {
+   "id": "moedas",
+   "topic": "bancos",
+   "title": "Posso ter contas em moedas diferentes?",
+   "body": [
+    "Sim. Cada conta tem a sua moeda (euro, real ou dólar), escolhida ao cadastrá-la em Empresas e contas.",
+    "Os valores aparecem na moeda da conta. Os relatórios e totais não convertem entre moedas: eles usam a conta escolhida no seletor do topo."
+   ],
+   "keywords": "moeda euro real dolar eur brl usd cambio"
+  },
+  {
+   "id": "relatorios",
+   "topic": "relatorios",
+   "title": "Como uso os Relatórios?",
+   "body": [
+    "Escolha o período (atalhos ou \"Personalizado\") e a situação (tudo, realizado ou em aberto): todos os números e gráficos se ajustam e comparam com o período anterior.",
+    "Na Composição, clique numa fatia para detalhar: do tipo (receitas, despesas fixas ou variáveis) para categoria, contato, centro de custo ou forma de pagamento, e daí mês a mês. O caminho no topo do card volta os níveis.",
+    "Cada gráfico tem botões para trocar o formato e baixar a imagem; a tabela de detalhamento exporta em CSV."
+   ],
+   "keywords": "relatorio grafico analise comparativo exportar csv png"
+  },
+  {
+   "id": "contatos",
+   "topic": "cadastros",
+   "title": "Como organizo clientes, fornecedores e funcionários?",
+   "body": [
+    "Em Contatos, as abas separam clientes, fornecedores e funcionários. A gaveta do contato ajusta máscaras e documentos ao país (CPF/CNPJ no Brasil, NIF em Portugal).",
+    "O painel \"Em aberto\" mostra quem lhe deve e a quem você deve, só com lançamentos ainda não pagos."
+   ],
+   "keywords": "contato cliente fornecedor funcionario cpf cnpj nif em aberto"
+  },
+  {
+   "id": "categorias",
+   "topic": "cadastros",
+   "title": "Como crio categorias?",
+   "body": [
+    "As categorias ficam em Finanças > Categorias: lá você cria as suas, escolhe ícone, cor ou marca, marca as que são assinatura e define um limite por mês. As categorias padrão do sistema valem para todos; nelas você ajusta só o limite."
+   ],
+   "keywords": "categoria criar editar padrao icone cor limite assinatura"
+  },
+  {
+   "id": "centro-custo",
+   "topic": "cadastros",
+   "title": "Para que servem os centros de custo?",
+   "body": [
+    "Eles separam os gastos por projeto, departamento ou cliente. Cada centro pode ter cor, ícone e um orçamento mensal; a tela mostra quanto já foi gasto no mês e o uso do orçamento.",
+    "Para editar, clique na linha: os campos abrem ali mesmo (Enter salva, Esc cancela). Os centros padrão do sistema são só de leitura."
+   ],
+   "keywords": "centro de custo projeto departamento orcamento"
+  },
+  {
+   "id": "emitir-recibo",
+   "topic": "recibos",
+   "title": "Como emito um recibo de um lançamento?",
+   "body": [],
+   "steps": [
+    "Em Transações, clique no menu ⋮ no fim da linha do lançamento.",
+    "Escolha \"Recibo: Recebimento\", \"Recibo: Pagamento\" ou outro modelo seu (aparecem só os que servem para aquele tipo de lançamento).",
+    "Confira o recibo e use \"Imprimir ou salvar PDF\"."
+   ],
+   "note": [
+    "Os dados do contato (nome, documento, endereço) vêm do cadastro dele: complete o contato em Contatos para o recibo sair completo. O cabeçalho com os dados da empresa pode ser desligado na própria tela do recibo."
+   ],
+   "keywords": "recibo emitir imprimir pdf comprovante pagamento recebimento"
+  },
+  {
+   "id": "modelos-recibo",
+   "topic": "recibos",
+   "title": "Como crio ou edito um modelo de recibo?",
+   "body": [
+    "Em Modelos de recibo, os padrões Recebimento e Pagamento já vêm prontos: dá para editar o texto e voltar ao original com \"Restaurar padrão\". Use \"Novo modelo\" para criar outros (até 12), escolhendo em quais lançamentos ele aparece: recebimentos, pagamentos ou qualquer um.",
+    "Escreva o texto e clique nos campos dinâmicos da direita para inseri-los no cursor: {CLIENT_NAME} vira o nome do contato, {TRANSACTION_VALUE} o valor, {CURRENT_DATE} a data de emissão, e assim por diante. \"Pré-visualizar\" mostra o resultado com dados de exemplo."
+   ],
+   "keywords": "modelo recibo editar criar campos dinamicos variaveis texto"
+  },
+  {
+   "id": "usuarios",
+   "topic": "conta",
+   "title": "Como adiciono usuários e escolho o que cada um pode fazer?",
+   "body": [
+    "Em Configurações da conta › Usuários, convide pelo e-mail e marque as permissões (ver, criar, editar ou excluir lançamentos, relatórios, contatos etc.).",
+    "A pessoa recebe um e-mail para definir a senha. Só o titular da conta pode adicionar usuários."
+   ],
+   "keywords": "usuario convidar permissao acesso equipe senha"
+  },
+  {
+   "id": "notificacoes",
+   "topic": "conta",
+   "title": "Como escolho quando receber notificações?",
+   "body": [
+    "Em Configurações da conta › Notificações, escolha os avisos por e-mail (lançamentos, vencimentos, novo acesso) e os dias da semana e horários em que quer recebê-los."
+   ],
+   "keywords": "notificacao email aviso horario dias vencimento"
+  },
+  {
+   "id": "apagar-conta",
+   "topic": "conta",
+   "title": "Quero apagar minha conta. Como faço?",
+   "body": [
+    "Por segurança, a exclusão completa da conta e dos dados é feita pela equipe. Abra um chamado do tipo \"Minha conta e acesso\", a partir do usuário titular, pedindo a exclusão.",
+    "Antes, se quiser guardar os dados, exporte as transações em Excel."
+   ],
+   "keywords": "apagar excluir conta cancelar encerrar dados"
+  },
+  {
+   "id": "plano-faturas",
+   "topic": "plano",
+   "title": "Onde vejo meu plano e as minhas faturas?",
+   "body": [
+    "Em Configurações da conta ficam o seu plano atual, o upgrade e a lista de faturas. O cartão do plano, no menu lateral, leva direto para lá."
+   ],
+   "keywords": "plano fatura invoice pagamento upgrade assinatura"
+  },
+  {
+   "id": "iva",
+   "topic": "plano",
+   "title": "O valor do plano inclui impostos (IVA)?",
+   "body": [
+    "No upgrade de plano, o resumo mostra o valor e a linha do imposto (IVA) antes de você confirmar. Dúvidas sobre uma cobrança: abra um chamado do tipo \"Plano e cobrança\"."
+   ],
+   "keywords": "iva vat imposto taxa valor"
+  },
+  {
+   "id": "abrir-chamado",
+   "topic": "suporte",
+   "title": "Como abro um chamado?",
+   "body": [
+    "Clique no botão de ajuda, no canto inferior direito de qualquer tela, e em \"Falar com o suporte\"; ou use \"Novo chamado\" nesta Central. Escolha o tipo, escreva o assunto e descreva o que aconteceu: a tela em que você estava vai junto, para agilizar."
+   ],
+   "keywords": "chamado ticket suporte ajuda problema erro contato"
+  },
+  {
+   "id": "resposta",
+   "topic": "suporte",
+   "title": "Como fico sabendo da resposta?",
+   "body": [
+    "Quando o suporte responde, você recebe um e-mail, o botão de ajuda ganha um selo e o chamado fica como \"Aguardando você\" em Meus chamados.",
+    "Responda pela própria conversa do chamado. Se o problema foi resolvido, encerre o chamado; dá para reabrir depois, se precisar."
+   ],
+   "keywords": "resposta prazo aviso email retorno"
+  }
+ ]
+}
