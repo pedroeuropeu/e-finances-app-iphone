@@ -1,6 +1,6 @@
 // Produção (o que vai para a App Store).
 #include "Base.xcconfig"
-PRODUCT_BUNDLE_IDENTIFIER = top.efinances.app
+PRODUCT_BUNDLE_IDENTIFIER = top.efinances.app$(EF_BUNDLE_SUFFIX)
 EF_DISPLAY_NAME = e-Finances
 EF_DEMO = NO
 EF_ENV_LABEL =

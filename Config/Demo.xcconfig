@@ -1,6 +1,6 @@
 // Modo demonstração: dados de exemplo, sem servidor (qualquer senha entra). Útil para testar e para a revisão da Apple.
 #include "Base.xcconfig"
-PRODUCT_BUNDLE_IDENTIFIER = top.efinances.app.demo
+PRODUCT_BUNDLE_IDENTIFIER = top.efinances.app.demo$(EF_BUNDLE_SUFFIX)
 EF_DISPLAY_NAME = e-Finances Demo
 EF_DEMO = YES
 EF_ENV_LABEL = Demonstração

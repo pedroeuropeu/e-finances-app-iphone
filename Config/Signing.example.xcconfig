@@ -1,3 +1,6 @@
-// Copie para Config/Signing.xcconfig (ignorado pelo git) e coloque o Team ID da sua conta Apple Developer.
+// Copie para Config/Signing.xcconfig (ignorado pelo git) e coloque o Team ID da sua conta Apple.
+// Conta Apple gratuita (Personal Team): o app instala direto no seu iPhone pelo Xcode e vale por 7 dias.
 DEVELOPMENT_TEAM = ABCDE12345
 CODE_SIGN_STYLE = Automatic
+// Só com a conta gratuita: identificador próprio para o teste (o oficial fica livre para a conta paga).
+EF_BUNDLE_SUFFIX = .pessoal

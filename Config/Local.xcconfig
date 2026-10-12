@@ -1,7 +1,7 @@
 // Ambiente local (docker-local + backend neste Mac). O simulador enxerga o "localhost" do Mac direto.
 // Num iPhone de verdade, troque localhost pelo IP do Mac na rede (ex.: 192.168.0.10).
 #include "Base.xcconfig"
-PRODUCT_BUNDLE_IDENTIFIER = top.efinances.app.local
+PRODUCT_BUNDLE_IDENTIFIER = top.efinances.app.local$(EF_BUNDLE_SUFFIX)
 EF_DISPLAY_NAME = e-Finances Local
 EF_DEMO = NO
 EF_ENV_LABEL = Local

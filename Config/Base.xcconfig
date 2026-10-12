@@ -8,5 +8,8 @@ INFOPLIST_FILE = App/Info.plist
 ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
 ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor
 ENABLE_USER_SCRIPT_SANDBOXING = YES
-// Time de assinatura: defina em Config/Signing.xcconfig (fora do git) ou no Xcode, em Signing & Capabilities.
+// Sufixo do bundle para testes no seu iPhone com a conta Apple gratuita (ex.: ".pessoal"), para não prender o
+// identificador oficial numa equipe gratuita. Vazio = identificador oficial.
+EF_BUNDLE_SUFFIX =
+// Time de assinatura (e o sufixo acima): defina em Config/Signing.xcconfig (fora do git) ou no Xcode.
 #include? "Signing.xcconfig"
