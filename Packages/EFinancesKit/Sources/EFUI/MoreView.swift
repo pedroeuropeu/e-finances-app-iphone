@@ -19,7 +19,7 @@ struct MoreView: View {
                             .frame(width: 58, height: 58).background(Color.efNavy, in: Circle())
                         VStack(alignment: .leading, spacing: 3) {
                             Text(app.profile?.fullName ?? "Minha conta").font(.title3.weight(.semibold))
-                            Text(app.profile?.email ?? app.settings.lastEmail).font(.subheadline).foregroundStyle(.secondary)
+                            Text(app.profile?.email ?? app.settings.lastEmail).font(.subheadline).foregroundStyle(Color.secondary)
                             if let plan = app.profile?.planName { Tag(plan, symbol: "crown.fill", color: .efTint) }
                         }
                     }
@@ -77,7 +77,7 @@ struct MoreView: View {
         Button { router.web = app.page(title, path) } label: {
             HStack {
                 row(symbol, color, title, sub: "Abre na web")
-                Image(systemName: "arrow.up.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+                Image(systemName: "arrow.up.right").font(.footnote.weight(.semibold)).foregroundStyle(Color.efTertiary)
             }
         }
     }
@@ -87,10 +87,10 @@ struct MoreView: View {
             SettingsIcon(symbol, color)
             VStack(alignment: .leading, spacing: 1) {
                 Text(title).foregroundStyle(Color.efInk)
-                if let sub { Text(sub).font(.footnote).foregroundStyle(.secondary) }
+                if let sub { Text(sub).font(.footnote).foregroundStyle(Color.secondary) }
             }
             Spacer(minLength: 4)
-            if let value { Text(value).foregroundStyle(.secondary) }
+            if let value { Text(value).foregroundStyle(Color.secondary) }
         }
     }
 }
@@ -177,7 +177,7 @@ private struct AccountDeletionContent: View {
                 VStack(spacing: 10) {
                     IconBadge(symbol: "person.crop.circle.badge.minus", color: .efExpense, size: 72)
                     Text("Excluir sua conta do e-Finances").font(.sora(22, .semibold, relativeTo: .title2)).multilineTextAlignment(.center)
-                    Text("Vale para você e para todas as empresas da conta.").font(.subheadline).foregroundStyle(.secondary)
+                    Text("Vale para você e para todas as empresas da conta.").font(.subheadline).foregroundStyle(Color.secondary)
                 }
                 .frame(maxWidth: .infinity)
                 .listRowBackground(Color.clear)
@@ -251,7 +251,7 @@ private struct AccountDeletionContent: View {
             SettingsIcon(symbol, color)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).fontWeight(.semibold)
-                Text(text).font(.footnote).foregroundStyle(.secondary)
+                Text(text).font(.footnote).foregroundStyle(Color.secondary)
             }
         }
         .padding(.vertical, 2)
@@ -300,13 +300,13 @@ private struct BillingContent: View {
                 .listRowBackground(Color.clear).listRowInsets(EdgeInsets())
 
                 Section {
-                    if b.invoices.isEmpty { Text("Nenhuma fatura ainda.").foregroundStyle(.secondary) }
+                    if b.invoices.isEmpty { Text("Nenhuma fatura ainda.").foregroundStyle(Color.secondary) }
                     ForEach(b.invoices) { i in
                         HStack(spacing: 12) {
                             SettingsIcon("doc.text.fill", i.status == .paid ? Color(hex: 0x059669) : Color(hex: 0x64748B))
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(i.description).lineLimit(1)
-                                Text([i.date.map(DateFormats.api), i.planName].compactMap { $0 }.joined(separator: " · ")).font(.footnote).foregroundStyle(.secondary)
+                                Text([i.date.map(DateFormats.api), i.planName].compactMap { $0 }.joined(separator: " · ")).font(.footnote).foregroundStyle(Color.secondary)
                             }
                             Spacer(minLength: 6)
                             VStack(alignment: .trailing, spacing: 1) {
@@ -355,7 +355,7 @@ struct AppearanceView: View {
                     HStack {
                         Label("Idioma do app", systemImage: "globe")
                         Spacer()
-                        Text("Português").foregroundStyle(.secondary)
+                        Text("Português").foregroundStyle(Color.secondary)
                     }
                 }
             } footer: { Text("No iPhone, o idioma de cada app muda nos Ajustes.") }
@@ -426,7 +426,7 @@ struct AboutView: View {
                 VStack(spacing: 10) {
                     EFLogo(size: 76)
                     (Text("e") + Text("·").foregroundColor(.efGreen) + Text("finances")).font(.sora(28, .semibold))
-                    Text("Versão \(DeviceInfo.appVersion) · iOS 17 ou mais novo").font(.subheadline).foregroundStyle(.secondary)
+                    Text("Versão \(DeviceInfo.appVersion) · iOS 17 ou mais novo").font(.subheadline).foregroundStyle(Color.secondary)
                     if app.demo { Tag("Modo demonstração: dados de exemplo", symbol: "sparkles", color: .efInfo) }
                 }
                 .frame(maxWidth: .infinity)

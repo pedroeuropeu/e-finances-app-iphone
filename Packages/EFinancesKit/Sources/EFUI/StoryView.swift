@@ -174,7 +174,8 @@ private struct StoryContent: View {
                 money(s.expenses, s)
                 Text("em despesas no mês").font(.title3).opacity(0.85)
                 if let d = s.expensesDeltaPct {
-                    Label("\(abs(d))% \(d <= 0 ? "a menos" : "a mais") que o mês anterior", systemImage: d <= 0 ? "arrow.down" : "arrow.up")
+                    Label(d == 0 ? "Igual ao mês anterior" : "\(abs(d))% \(d < 0 ? "a menos" : "a mais") que o mês anterior",
+                          systemImage: d == 0 ? "equal" : d < 0 ? "arrow.down" : "arrow.up")
                         .font(.subheadline.weight(.semibold)).padding(.horizontal, 12).padding(.vertical, 8)
                         .background(.white.opacity(0.18), in: Capsule())
                 }

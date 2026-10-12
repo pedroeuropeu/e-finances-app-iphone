@@ -155,6 +155,13 @@ public struct RootView: View {
 
     public init(app: AppModel) { _app = State(initialValue: app) }
 
+    /// O que cobre o app agora: a tela de bloqueio, a capa do alternador de apps ou nada.
+    private var shield: ShieldState {
+        if app.locked { return .lock }
+        if covered && app.settings.coverInSwitcher && app.session.isLoggedIn { return .cover }
+        return .none
+    }
+
     public var body: some View {
         ZStack {
             Color.efBackground.ignoresSafeArea()
@@ -165,8 +172,10 @@ public struct RootView: View {
             } else {
                 MainTabs()
             }
+            #if !os(iOS)
             if app.locked { LockView().transition(.opacity).zIndex(2) }
             if covered && app.settings.coverInSwitcher && app.session.isLoggedIn { PrivacyCover().zIndex(3) }
+            #endif
             ToastOverlay().zIndex(4)
         }
         .environment(app)
@@ -190,15 +199,63 @@ public struct RootView: View {
             @unknown default: break
             }
         }
+        #if os(iOS)
+        // bloqueio e capa numa janela própria, acima das barras, das folhas e dos alertas do app
+        .onChange(of: shield) { _, s in Shield.shared.update(s, app: app, router: router) }
+        #endif
         .onChange(of: app.session) { _, s in if !s.isLoggedIn { router = Router() } }
         .onChange(of: app.pendingStory) { _, s in if s != nil && !app.locked { router.showStory = true } }
         .efFullScreen(isPresented: $router.showStory) { StoryView(story: app.pendingStory).environment(app).environment(router) }
         .sheet(item: $router.form) { req in
-            TransactionFormView(request: req).environment(app).environment(router)
+            TransactionFormView(request: req).efToasts().environment(app).environment(router)
         }
         .sheet(item: $router.web) { page in WebSheet(page: page) }
+        // por fora das folhas, para elas herdarem (o que está dentro da ZStack não chega nelas)
+        .tint(.efTint)
+        .formStyle(.grouped)
     }
 }
+
+enum ShieldState: Equatable { case none, lock, cover }
+
+#if os(iOS)
+/**
+ Janela por cima de tudo para o bloqueio e a capa do alternador de apps. Na mesma janela do app, a barra de navegação,
+ a barra de abas e as folhas abertas ficariam por cima da tela de bloqueio.
+ */
+@MainActor
+final class Shield {
+    static let shared = Shield()
+    private var window: UIWindow?
+    private var state: ShieldState = .none
+
+    func update(_ new: ShieldState, app: AppModel, router: Router) {
+        guard new != state else { return }
+        state = new
+        switch new {
+        case .none:
+            window?.isHidden = true
+            window = nil
+        case .lock, .cover:
+            guard let scene = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first else { return }
+            let w = window ?? UIWindow(windowScene: scene)
+            w.windowLevel = .alert + 1
+            let content = Group {
+                if new == .lock { LockView() } else { PrivacyCover() }
+            }
+            .environment(app)
+            .environment(router)
+            .tint(.efTint)
+            .preferredColorScheme(app.settings.theme == .light ? .light : app.settings.theme == .dark ? .dark : nil)
+            let host = UIHostingController(rootView: AnyView(content))
+            host.view.backgroundColor = .clear
+            w.rootViewController = host
+            w.isHidden = false
+            window = w
+        }
+    }
+}
+#endif
 
 /// Abertura: marca enquanto o app confere a sessão guardada.
 struct SplashView: View {
@@ -218,7 +275,8 @@ struct SplashView: View {
 struct PrivacyCover: View {
     var body: some View {
         ZStack {
-            Rectangle().fill(.ultraThinMaterial).ignoresSafeArea()
+            // fundo sólido: o desfoque ainda deixava os valores grandes legíveis
+            Color.efBackground.ignoresSafeArea()
             EFLogo(size: 72)
         }
     }
@@ -235,7 +293,7 @@ struct LockView: View {
             EFLogo(size: 64)
             VStack(spacing: 6) {
                 Text("Olá, \(app.profile?.firstName ?? "")").font(.sora(28, .bold))
-                Text("O e-Finances está bloqueado").foregroundStyle(.secondary)
+                Text("O e-Finances está bloqueado").foregroundStyle(Color.secondary)
             }
             Spacer()
             Button {

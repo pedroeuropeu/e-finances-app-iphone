@@ -190,6 +190,8 @@ public enum EFAppearance {
     @MainActor public static func configure() {
         EFFonts.register()
         #if os(iOS)
+        // alertas e menus de ação do sistema com o verde do app
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor { $0.userInterfaceStyle == .dark ? UIColor(hex: 0x34D399) : UIColor(hex: 0x047857) }
         let nav = UINavigationBar.appearance()
         if let large = UIFont(name: "Sora-Bold", size: 32) {
             nav.largeTitleTextAttributes = [.font: UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: large)]

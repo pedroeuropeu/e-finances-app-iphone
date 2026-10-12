@@ -67,7 +67,7 @@ private struct DetailContent: View {
                 VStack(spacing: 10) {
                     CategoryBadge(t.category, size: 64, fallbackName: t.description)
                     Text(t.description).font(.sora(22, .semibold, relativeTo: .title2)).multilineTextAlignment(.center)
-                    Text([t.type.label, t.contact?.name].compactMap { $0 }.joined(separator: " · ")).font(.subheadline).foregroundStyle(.secondary)
+                    Text([t.type.label, t.contact?.name].compactMap { $0 }.joined(separator: " · ")).font(.subheadline).foregroundStyle(Color.secondary)
                     MoneyText(t.value, signedIncome: t.type.isIncome, font: .sora(34, .semibold, relativeTo: .largeTitle), color: t.type.isIncome ? .efIncome : .efInk)
                     statusTag(t, status)
                 }
@@ -103,7 +103,7 @@ private struct DetailContent: View {
                             Text("Parcela \(n) de \(total)").font(.headline)
                             Spacer()
                             HStack(spacing: 3) {
-                                Text("Faltam \(total - n) ·").foregroundStyle(.secondary)
+                                Text("Faltam \(total - n) ·").foregroundStyle(Color.secondary)
                                 MoneyText(t.value * Decimal(total - n), font: .subheadline, color: .secondary)
                             }
                             .font(.subheadline)
@@ -131,7 +131,7 @@ private struct DetailContent: View {
                 if let doc = t.docNumber, !doc.isEmpty { LabeledContent("Nº do documento", value: doc) }
                 if let notes = t.details, !notes.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Observações").foregroundStyle(.secondary).font(.subheadline)
+                        Text("Observações").foregroundStyle(Color.secondary).font(.subheadline)
                         Text(notes)
                     }
                 }

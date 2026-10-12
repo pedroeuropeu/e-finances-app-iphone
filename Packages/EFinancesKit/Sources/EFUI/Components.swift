@@ -112,7 +112,7 @@ public struct SectionTitle: View {
         HStack(alignment: .lastTextBaseline) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(.sora(20, .semibold, relativeTo: .title3)).foregroundStyle(Color.efInk)
-                if let subtitle { Text(subtitle).font(.subheadline).foregroundStyle(.secondary) }
+                if let subtitle { Text(subtitle).font(.subheadline).foregroundStyle(Color.secondary) }
             }
             Spacer(minLength: 8)
             if let action, let onAction {
@@ -157,7 +157,7 @@ public struct KPITile: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(label).font(.footnote).foregroundStyle(.secondary).lineLimit(1)
+            Text(label).font(.footnote).foregroundStyle(Color.secondary).lineLimit(1)
             Group {
                 if let value { MoneyText(value, font: .sora(19, .semibold, relativeTo: .headline), color: color ?? .efInk) }
                 else { Text(text ?? "—").font(.sora(19, .semibold, relativeTo: .headline)).foregroundStyle(color ?? .efInk) }
@@ -217,6 +217,11 @@ public struct EmptyStateView: View {
     }
 }
 
+public extension View {
+    /// Mostra os avisos por cima de uma folha (o aviso da raiz fica atrás dela).
+    func efToasts() -> some View { overlay { ToastOverlay() } }
+}
+
 // MARK: - aviso (toast) com "Desfazer"
 
 /// Aviso flutuante de vidro acima da barra de abas, com a ação (ex.: "Desfazer").
@@ -274,7 +279,7 @@ public struct TransactionRow: View {
     public var body: some View {
         let status = t.dueStatus(today: today)
         let fromBank = app.mode != .manual
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             if selecting {
                 Image(systemName: selected ? "checkmark.circle.fill" : "circle").font(.title3).foregroundStyle(selected ? Color.efTint : Color.secondary)
             }
@@ -283,7 +288,7 @@ public struct TransactionRow: View {
                 HStack(spacing: 4) {
                     Text(t.description).font(.body).foregroundStyle(Color.efInk).lineLimit(1)
                     if let plot = t.plot { Text(plot).font(.caption2.weight(.semibold)).padding(.horizontal, 5).padding(.vertical, 1).background(Color.primary.opacity(0.08), in: Capsule()) }
-                    if t.attachments > 0 { Image(systemName: "paperclip").font(.caption).foregroundStyle(.secondary) }
+                    if t.attachments > 0 { Image(systemName: "paperclip").font(.caption).foregroundStyle(Color.secondary) }
                 }
                 (statusText(status, fromBank: fromBank) + Text(" · \(t.category?.name ?? "Sem categoria")").foregroundColor(.secondary))
                     .font(.footnote).lineLimit(2)
@@ -293,14 +298,14 @@ public struct TransactionRow: View {
                 .lineLimit(1).fixedSize()
             if showPay && !selecting {
                 if fromBank {
-                    Image(systemName: app.mode == .frozen ? "snowflake" : "lock").font(.footnote).foregroundStyle(.tertiary).frame(width: 28)
+                    Image(systemName: app.mode == .frozen ? "snowflake" : "lock").font(.footnote).foregroundStyle(Color.efTertiary).frame(width: 28)
                         .accessibilityLabel(app.mode == .frozen ? "Só consulta" : "Veio do banco")
                 } else {
                     Button { onTogglePaid?() } label: {
                         Image(systemName: t.paid ? "checkmark.circle.fill" : "circle").font(.title2).foregroundStyle(t.paid ? Color.efIncome : Color.secondary.opacity(0.6))
                     }
                     .buttonStyle(.plain)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 28, height: 32)
                     .accessibilityLabel(t.paid ? "Voltar para pendente" : t.type.isIncome ? "Marcar como recebido" : "Marcar como pago")
                     .sensoryFeedback(.success, trigger: t.paid)
                 }
@@ -401,7 +406,7 @@ public struct DonutChart: View {
             .frame(width: 124, height: 124)
             .overlay {
                 VStack(spacing: 0) {
-                    Text(centerLabel).font(.caption2).foregroundStyle(.secondary)
+                    Text(centerLabel).font(.caption2).foregroundStyle(Color.secondary)
                     Text(centerValue).font(.sora(15, .semibold)).monospacedDigit().lineLimit(1).minimumScaleFactor(0.6)
                 }
                 .padding(.horizontal, 22)
@@ -494,7 +499,7 @@ public struct MonthCalendar: View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 7)
         LazyVGrid(columns: columns, spacing: 4) {
             ForEach(Array(DateFormats.weekdayInitials.enumerated()), id: \.offset) { _, w in
-                Text(w).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                Text(w).font(.caption.weight(.semibold)).foregroundStyle(Color.secondary)
             }
             ForEach(Array(cells.enumerated()), id: \.offset) { _, day in
                 if let d = day {
@@ -558,7 +563,7 @@ public struct LabeledField<Field: View>: View {
     public init(_ label: String, error: String? = nil, @ViewBuilder field: () -> Field) { self.label = label; self.error = error; self.field = field() }
     public var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(label).font(.footnote).foregroundStyle(.secondary)
+            Text(label).font(.footnote).foregroundStyle(Color.secondary)
             field
                 .padding(.horizontal, 16).frame(minHeight: 52)
                 .background(Color.efSurface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))

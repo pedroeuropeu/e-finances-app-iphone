@@ -33,7 +33,7 @@ private struct HomeContent: View {
                     subscriptions(data)
                     flow(data)
                     if app.demo {
-                        Text("Dados de exemplo · modo demonstração").font(.footnote).foregroundStyle(.tertiary).frame(maxWidth: .infinity)
+                        Text("Dados de exemplo · modo demonstração").font(.footnote).foregroundStyle(Color.efTertiary).frame(maxWidth: .infinity)
                     }
                 }
                 .padding(.bottom, 24)
@@ -63,7 +63,7 @@ private struct HomeContent: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("\(app.greeting), \(app.profile?.firstName ?? "")").font(.sora(30, .bold, relativeTo: .largeTitle)).lineLimit(1).minimumScaleFactor(0.7)
-            Text(DateFormats.longDay(app.today).capitalizedFirst).foregroundStyle(.secondary)
+            Text(DateFormats.longDay(app.today).capitalizedFirst).foregroundStyle(Color.secondary)
         }
         .padding(.horizontal, EFLayout.gutter)
         .padding(.top, 4)
@@ -124,10 +124,10 @@ private struct HomeContent: View {
                 .frame(width: 54, height: 54)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Fechamento de \(story.periodLabel)").font(.subheadline.weight(.semibold)).foregroundStyle(Color.efInk)
-                    Text("Quanto entrou, saiu e sobrou. Toque para ver.").font(.footnote).foregroundStyle(.secondary)
+                    Text("Quanto entrou, saiu e sobrou. Toque para ver.").font(.footnote).foregroundStyle(Color.secondary)
                 }
                 Spacer(minLength: 0)
-                Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+                Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Color.efTertiary)
             }
             .efCard(padding: 14)
         }
@@ -188,12 +188,12 @@ private struct HomeContent: View {
             HStack {
                 Text("\(vm.agendaDay.day) de \(DateFormats.monthNames[vm.agendaDay.month - 1])").font(.subheadline.weight(.semibold))
                 Spacer()
-                if !dayList.isEmpty { Text(plural(dayList.count, "lançamento", "lançamentos")).font(.footnote).foregroundStyle(.secondary) }
+                if !dayList.isEmpty { Text(plural(dayList.count, "lançamento", "lançamentos")).font(.footnote).foregroundStyle(Color.secondary) }
             }
             .padding(.horizontal, 4).padding(.top, 4)
             if dayList.isEmpty {
                 VStack(spacing: 10) {
-                    Text("Nada marcado para este dia.").font(.subheadline).foregroundStyle(.secondary)
+                    Text("Nada marcado para este dia.").font(.subheadline).foregroundStyle(Color.secondary)
                     if d.mode == .manual {
                         Button { router.newTransaction(.variable, date: vm.agendaDay) } label: { Label("Lançar neste dia", systemImage: "plus") }
                             .buttonStyle(.bordered).buttonBorderShape(.capsule).tint(.efTint)
@@ -209,7 +209,7 @@ private struct HomeContent: View {
     }
 
     private func legend(_ label: String, _ color: Color) -> some View {
-        HStack(spacing: 4) { Circle().fill(color).frame(width: 7, height: 7); Text(label).foregroundStyle(.secondary) }
+        HStack(spacing: 4) { Circle().fill(color).frame(width: 7, height: 7); Text(label).foregroundStyle(Color.secondary) }
     }
 
     // MARK: gastos
@@ -270,10 +270,10 @@ private struct HomeContent: View {
                                         InstallmentRing(paid: i.paid, total: i.total, size: 44)
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text(i.name).font(.subheadline.weight(.semibold)).foregroundStyle(Color.efInk).lineLimit(1)
-                                            HStack(spacing: 0) { MoneyText(i.amount, font: .caption, color: .secondary); Text("/mês").font(.caption).foregroundStyle(.secondary) }
+                                            HStack(spacing: 0) { MoneyText(i.amount, font: .caption, color: .secondary); Text("/mês").font(.caption).foregroundStyle(Color.secondary) }
                                         }
                                     }
-                                    if let end = i.endDate { Text("Termina em \(DateFormats.shortMonthYear(end))").font(.caption).foregroundStyle(.secondary) }
+                                    if let end = i.endDate { Text("Termina em \(DateFormats.shortMonthYear(end))").font(.caption).foregroundStyle(Color.secondary) }
                                 }
                                 .padding(14)
                                 .frame(width: 200, alignment: .leading)
@@ -303,11 +303,11 @@ private struct HomeContent: View {
                         }
                         HStack(spacing: 0) {
                             MoneyText(s.yearlyTotal, currency: s.currency, font: .subheadline, color: .secondary)
-                            Text(" por ano").font(.subheadline).foregroundStyle(.secondary)
+                            Text(" por ano").font(.subheadline).foregroundStyle(Color.secondary)
                         }
                         .padding(.leading, 12)
                         Spacer(minLength: 0)
-                        Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+                        Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Color.efTertiary)
                     }
                     .efCard(padding: 12)
                 }
@@ -481,7 +481,7 @@ struct AccountsCarousel: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 IconBadge(symbol: "link", color: Color(hex: 0x059669), size: 32)
                                 Text("Conectar banco").font(.subheadline.weight(.semibold)).foregroundStyle(Color.efInk)
-                                Text("Open Finance, só leitura").font(.caption).foregroundStyle(.secondary)
+                                Text("Open Finance, só leitura").font(.caption).foregroundStyle(Color.secondary)
                             }
                             .padding(14).frame(width: 160, height: 118, alignment: .topLeading)
                             .background(Color.efSurface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
@@ -513,14 +513,14 @@ struct AccountsCarousel: View {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 6) {
                     AccountBadge(a, companyId: companyId, size: 24)
-                    Text(a.mode == .manual ? "e-Finances" : a.bankName ?? bank?.0.bankName ?? "Banco").font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                    Text(a.mode == .manual ? "e-Finances" : a.bankName ?? bank?.0.bankName ?? "Banco").font(.caption).foregroundStyle(Color.secondary).lineLimit(1)
                     Spacer(minLength: 0)
                     if needsAction { Image(systemName: "arrow.triangle.2.circlepath").font(.caption).foregroundStyle(Color.efWarn) }
                     else if on { Image(systemName: "checkmark.circle.fill").font(.subheadline).foregroundStyle(Color.efTint).accessibilityLabel("Em uso") }
                 }
                 Text(a.name).font(.subheadline.weight(.semibold)).foregroundStyle(Color.efInk).lineLimit(1)
                 MoneyText(bank?.1.headline ?? a.balance, currency: a.currency, font: .headline)
-                Text(sub).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                Text(sub).font(.caption).foregroundStyle(Color.secondary).lineLimit(1)
             }
             .padding(14)
             .frame(width: 172, height: 118, alignment: .topLeading)
@@ -549,7 +549,7 @@ struct LimitRow: View {
                     Text(item.categoryName).font(.subheadline.weight(.semibold)).lineLimit(1)
                     HStack(spacing: 3) {
                         MoneyText(item.spent, font: .caption, color: .secondary)
-                        Text("de").font(.caption).foregroundStyle(.secondary)
+                        Text("de").font(.caption).foregroundStyle(Color.secondary)
                         MoneyText(item.limit, font: .caption, color: .secondary)
                     }
                 }

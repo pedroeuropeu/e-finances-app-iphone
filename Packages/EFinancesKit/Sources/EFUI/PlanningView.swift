@@ -60,7 +60,7 @@ private struct PlanningContent: View {
             }
         }
         .sheet(item: $editing) { e in
-            LimitSheet(edit: e, vm: vm, categories: availableCategories(vm.state.value, keeping: e.item?.categoryId))
+            LimitSheet(edit: e, vm: vm, categories: availableCategories(vm.state.value, keeping: e.item?.categoryId)).efToasts()
         }
         .task {
             if let t = router.planningTab { vm.tab = t; router.planningTab = nil }
@@ -100,7 +100,7 @@ private struct PlanningContent: View {
                     }
                     .buttonStyle(.plain)
                     .swipeActions {
-                        Button(role: .destructive) { vm.deleteLimit(item.id) } label: { Label("Excluir", systemImage: "trash") }
+                        Button(role: .destructive) { vm.deleteLimit(item.id) } label: { Label("Excluir", systemImage: "trash") }.tint(.efExpense)
                     }
                 }
             }
@@ -124,9 +124,9 @@ private struct PlanningContent: View {
                         VStack(alignment: .leading, spacing: 1) {
                             Text(sug.categoryName)
                             HStack(spacing: 3) {
-                                Text("Média de").font(.footnote).foregroundStyle(.secondary)
+                                Text("Média de").font(.footnote).foregroundStyle(Color.secondary)
                                 MoneyText(sug.average, font: .footnote, color: .secondary)
-                                Text("por mês").font(.footnote).foregroundStyle(.secondary)
+                                Text("por mês").font(.footnote).foregroundStyle(Color.secondary)
                             }
                         }
                         Spacer()
@@ -193,14 +193,14 @@ private struct PlanningContent: View {
                 Text(i.name).lineLimit(1)
                 HStack(spacing: 3) {
                     MoneyText(i.amount, font: .footnote, color: .secondary)
-                    Text("/mês\(i.endDate.map { " · termina em \(DateFormats.shortMonthYear($0))" } ?? "")").font(.footnote).foregroundStyle(.secondary)
+                    Text("/mês\(i.endDate.map { " · termina em \(DateFormats.shortMonthYear($0))" } ?? "")").font(.footnote).foregroundStyle(Color.secondary)
                 }
                 Tag(i.source == .ledger ? "Lançamentos" : i.accountName ?? "Cartão", symbol: i.source == .ledger ? "list.bullet.rectangle" : "link",
                     color: i.source == .ledger ? .efInfo : .efNavy)
             }
             Spacer(minLength: 6)
             VStack(alignment: .trailing, spacing: 0) {
-                Text("Falta").font(.caption2).foregroundStyle(.secondary)
+                Text("Falta").font(.caption2).foregroundStyle(Color.secondary)
                 MoneyText(i.remainingAmount, font: .subheadline.weight(.medium))
             }
         }
@@ -272,7 +272,7 @@ private struct PlanningContent: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.name).foregroundStyle(Color.efInk).lineLimit(1)
                 Text([item.frequency.label, item.nextDate.map { "próxima em \(DateFormats.dayMonth($0))" }, item.accountName].compactMap { $0 }.joined(separator: " · "))
-                    .font(.footnote).foregroundStyle(.secondary).lineLimit(1)
+                    .font(.footnote).foregroundStyle(Color.secondary).lineLimit(1)
             }
             Spacer(minLength: 6)
             MoneyText(item.amount, currency: item.currency, font: .subheadline.weight(.medium))
@@ -328,7 +328,7 @@ private struct LimitSheet: View {
                     HStack {
                         Text("Limite por mês")
                         Spacer()
-                        Text("R$").foregroundStyle(.secondary)
+                        Text("R$").foregroundStyle(Color.secondary)
                         TextField("0,00", text: $value).efDecimalField().multilineTextAlignment(.trailing).frame(maxWidth: 130)
                     }
                     VStack(alignment: .leading, spacing: 6) {

@@ -62,6 +62,8 @@ public extension Color {
     // semânticas
     static let efIncome = Color.dynamic(light: 0x15803D, dark: 0x4ADE80)
     static let efExpense = Color.dynamic(light: 0xDC2626, dark: 0xF87171)
+    /// Cinza mais claro (setas, legendas). Fixo: o estilo .tertiary vira tom da cor de destaque dentro de botões.
+    static let efTertiary = Color.secondary.opacity(0.55)
     static let efWarn = Color.dynamic(light: 0xB45309, dark: 0xFBBF24)
     static let efInfo = Color.dynamic(light: 0x2563EB, dark: 0x60A5FA)
 

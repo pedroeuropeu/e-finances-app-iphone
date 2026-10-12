@@ -64,12 +64,12 @@ private struct CategoriesContent: View {
             case .failed(let e): Section { ErrorView(e) { await vm.load() } }.listRowBackground(Color.clear)
             case .ready:
                 Section {
-                    if vm.filtered.isEmpty { Text("Nenhuma categoria encontrada.").foregroundStyle(.secondary) }
+                    if vm.filtered.isEmpty { Text("Nenhuma categoria encontrada.").foregroundStyle(Color.secondary) }
                     ForEach(vm.filtered.sorted { $0.spent > $1.spent }) { v in
                         Button { editing = CategoryEdit(view: v) } label: { row(v) }
                             .swipeActions {
                                 if !v.category.systemDefault {
-                                    Button(role: .destructive) { Task { _ = await vm.delete(v.category) } } label: { Label("Excluir", systemImage: "trash") }
+                                    Button(role: .destructive) { Task { _ = await vm.delete(v.category) } } label: { Label("Excluir", systemImage: "trash") }.tint(.efExpense)
                                 }
                             }
                     }
@@ -91,7 +91,7 @@ private struct CategoriesContent: View {
                 Button { editing = CategoryEdit() } label: { Image(systemName: "plus") }.accessibilityLabel("Nova categoria")
             }
         }
-        .sheet(item: $editing) { e in CategoryEditor(vm: vm, editing: e.view) }
+        .sheet(item: $editing) { e in CategoryEditor(vm: vm, editing: e.view).efToasts() }
         .task { if vm.state.value == nil { await vm.load() } }
     }
 
@@ -108,7 +108,7 @@ private struct CategoriesContent: View {
                     if v.category.systemDefault { Image(systemName: "lock.fill").font(.caption2) }
                     Text("\(plural(Int(v.count), "lançamento", "lançamentos"))\(v.category.isIncomeCategory ? " · receita" : "")")
                 }
-                .font(.footnote).foregroundStyle(.secondary)
+                .font(.footnote).foregroundStyle(Color.secondary)
                 if let p = v.limitPercent {
                     ProgressBar(min(Double(p) / 100, 1), color: color, height: 5).padding(.top, 4)
                 }
@@ -118,7 +118,7 @@ private struct CategoriesContent: View {
                 MoneyText(v.category.isIncomeCategory ? v.income : v.spent, currency: vm.currency, font: .subheadline.weight(.medium))
                 if let l = v.limit {
                     HStack(spacing: 2) {
-                        Text("de").font(.caption2).foregroundStyle(.secondary)
+                        Text("de").font(.caption2).foregroundStyle(Color.secondary)
                         MoneyText(l, currency: vm.currency, font: .caption2, color: .secondary)
                     }
                 }
@@ -159,7 +159,7 @@ private struct CategoryEditor: View {
                     VStack(spacing: 8) {
                         CategoryBadge(form.look, size: 72, fallbackName: form.name)
                         Text(form.name.isEmpty ? "Nova categoria" : form.name).font(.sora(20, .semibold, relativeTo: .title3))
-                        if systemDefault { Text("Padrão do sistema: só o limite muda.").font(.footnote).foregroundStyle(.secondary) }
+                        if systemDefault { Text("Padrão do sistema: só o limite muda.").font(.footnote).foregroundStyle(Color.secondary) }
                     }
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
@@ -188,7 +188,7 @@ private struct CategoryEditor: View {
                         Toggle(isOn: $form.subscription) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("É assinatura")
-                                Text("Os lançamentos desta categoria entram em Assinaturas.").font(.footnote).foregroundStyle(.secondary)
+                                Text("Os lançamentos desta categoria entram em Assinaturas.").font(.footnote).foregroundStyle(Color.secondary)
                             }
                         }
                     }
@@ -198,7 +198,7 @@ private struct CategoryEditor: View {
                     HStack {
                         Text("Limite por mês")
                         Spacer()
-                        Text("R$").foregroundStyle(.secondary)
+                        Text("R$").foregroundStyle(Color.secondary)
                         TextField("Sem limite", text: $form.limit).efDecimalField().multilineTextAlignment(.trailing).frame(maxWidth: 130)
                     }
                     if !form.limit.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -297,7 +297,7 @@ private struct CategoryEditor: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     ForEach(groups, id: \.0) { g, items in
-                        Text(g).font(.caption.weight(.semibold)).foregroundStyle(.secondary).textCase(.uppercase)
+                        Text(g).font(.caption.weight(.semibold)).foregroundStyle(Color.secondary).textCase(.uppercase)
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 12) {
                             ForEach(items, id: \.0) { key, brand in
                                 let on = form.brand == key
@@ -336,7 +336,7 @@ private struct CategoryEditor: View {
             if form.logo != nil {
                 Button("Remover imagem", role: .destructive) { form.logo = nil }.font(.footnote)
             }
-            Text("O app reduz a imagem para 128 × 128 antes de enviar.").font(.footnote).foregroundStyle(.secondary)
+            Text("O app reduz a imagem para 128 × 128 antes de enviar.").font(.footnote).foregroundStyle(Color.secondary)
         }
         .padding(.vertical, 6)
     }

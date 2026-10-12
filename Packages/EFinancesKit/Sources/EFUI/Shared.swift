@@ -76,10 +76,10 @@ struct WorkspaceButton: View {
                 if let a = app.account { AccountBadge(a, companyId: app.company?.id ?? 0, size: 24) }
                 VStack(alignment: .leading, spacing: 0) {
                     Text(app.company?.name ?? "e-Finances").font(.subheadline.weight(.semibold)).foregroundStyle(Color.efInk)
-                    Text(app.account?.name ?? "").font(.caption2).foregroundStyle(.secondary)
+                    Text(app.account?.name ?? "").font(.caption2).foregroundStyle(Color.secondary)
                 }
                 .lineLimit(1)
-                Image(systemName: "chevron.down").font(.caption2.weight(.bold)).foregroundStyle(.secondary)
+                Image(systemName: "chevron.down").font(.caption2.weight(.bold)).foregroundStyle(Color.secondary)
             }
             .frame(maxWidth: 200, alignment: .leading)
         }
@@ -147,12 +147,12 @@ struct WorkspaceSheet: View {
                 AccountBadge(account, companyId: company.id)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(account.name).foregroundStyle(Color.efInk).lineLimit(1)
-                    Text(sub).font(.footnote).foregroundStyle(.secondary).lineLimit(1)
+                    Text(sub).font(.footnote).foregroundStyle(Color.secondary).lineLimit(1)
                 }
                 Spacer(minLength: 6)
                 VStack(alignment: .trailing, spacing: 0) {
                     MoneyText(value, currency: account.currency, font: .subheadline.weight(.medium))
-                    if bank?.1.kind == .credit { Text("fatura").font(.caption2).foregroundStyle(.secondary) }
+                    if bank?.1.kind == .credit { Text("fatura").font(.caption2).foregroundStyle(Color.secondary) }
                 }
                 Group {
                     if choosing == account.id { ProgressView() }
@@ -206,7 +206,7 @@ struct NoticeBanner: View {
             Image(systemName: symbol).font(.title3).foregroundStyle(color).frame(width: 26)
             VStack(alignment: .leading, spacing: 4) {
                 Text(title).font(.subheadline.weight(.semibold))
-                Text(text).font(.footnote).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+                Text(text).font(.footnote).foregroundStyle(Color.secondary).fixedSize(horizontal: false, vertical: true)
                 if let action, let onAction {
                     Button(action, action: onAction).font(.footnote.weight(.semibold)).buttonStyle(.bordered).buttonBorderShape(.capsule).tint(color).padding(.top, 4)
                 }

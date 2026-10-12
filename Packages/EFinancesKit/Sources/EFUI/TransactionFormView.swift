@@ -143,7 +143,7 @@ private struct FormContent: View {
                             .focused($focus, equals: .doc)
                     }
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Observações").font(.footnote).foregroundStyle(.secondary)
+                        Text("Observações").font(.footnote).foregroundStyle(Color.secondary)
                         TextField("Opcional", text: $vm.draft.details, axis: .vertical)
                             .lineLimit(2...6)
                             .focused($focus, equals: .notes)
@@ -181,7 +181,7 @@ private struct FormContent: View {
 
     private var amount: some View {
         VStack(spacing: 4) {
-            Text(vm.organizeOnly ? "Valor" : income ? "Valor a receber" : "Valor a pagar").font(.subheadline).foregroundStyle(.secondary)
+            Text(vm.organizeOnly ? "Valor" : income ? "Valor a receber" : "Valor a pagar").font(.subheadline).foregroundStyle(Color.secondary)
             ZStack {
                 Text(Money.format(cents: d.cents, currency: app.currency))
                     .font(.sora(44, .semibold, relativeTo: .largeTitle))
@@ -197,7 +197,9 @@ private struct FormContent: View {
                     }))
                     .efNumberField()
                     .focused($focus, equals: .amount)
-                    .opacity(0.011)
+                    .foregroundStyle(.clear)
+                    .tint(.clear)
+                    .opacity(0.02)
                     .accessibilityLabel(income ? "Valor a receber" : "Valor a pagar")
                     .accessibilityValue(Money.format(cents: d.cents, currency: app.currency))
                 }
@@ -213,7 +215,7 @@ private struct FormContent: View {
                     Text(focus == .amount ? "Os centavos entram pela direita" : "Toque para digitar")
                 }
             }
-            .font(.footnote).foregroundStyle(.secondary)
+            .font(.footnote).foregroundStyle(Color.secondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 6)
@@ -336,7 +338,7 @@ private struct FormContent: View {
 
     private func installmentRow(_ plan: InstallmentPlan, _ i: Int) -> some View {
         HStack(spacing: 8) {
-            Text("\(i + 1)ª").foregroundStyle(.secondary).frame(width: 30, alignment: .leading)
+            Text("\(i + 1)ª").foregroundStyle(Color.secondary).frame(width: 30, alignment: .leading)
             MoneyText(plan.values[i], font: .body)
             Spacer(minLength: 4)
             if plan.custom.contains(i) {
@@ -434,7 +436,7 @@ private struct ContactPicker: View {
                             InitialsBadge(c.name, color: c.category?.color ?? .efInfo, size: 32)
                             VStack(alignment: .leading, spacing: 1) {
                                 Text(c.name).foregroundStyle(Color.efInk)
-                                if let cat = c.category { Text(cat.label).font(.caption).foregroundStyle(.secondary) }
+                                if let cat = c.category { Text(cat.label).font(.caption).foregroundStyle(Color.secondary) }
                             }
                             Spacer()
                             if vm.draft.contact?.id == c.id { check }

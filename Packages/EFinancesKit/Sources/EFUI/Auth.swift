@@ -46,7 +46,9 @@ struct OnboardingView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             (Text(pages[i].0) + Text(pages[i].1).foregroundColor(.efTint))
                                 .font(.sora(32, .bold, relativeTo: .largeTitle))
-                            Text(pages[i].2).font(.body).foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Text(pages[i].2).font(.body).foregroundStyle(Color.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 28)
@@ -111,7 +113,7 @@ private struct OnboardingArt: View {
                     InstallmentRing(paid: 3, total: 10, size: 52)
                     VStack(alignment: .leading) {
                         Text("Notebook Dell").font(.subheadline.weight(.semibold))
-                        Text("R$ 412,90/mês · até jul/2027").font(.caption).foregroundStyle(.secondary)
+                        Text("R$ 412,90/mês · até jul/2027").font(.caption).foregroundStyle(Color.secondary)
                     }
                 }
                 .efCard(padding: 14).frame(width: 262).shadow(color: .black.opacity(0.08), radius: 12, y: 6)
@@ -128,7 +130,7 @@ private struct OnboardingArt: View {
                     SettingsIcon("flag.fill", .efNavy)
                     VStack(alignment: .leading, spacing: 1) {
                         Text("Lazer passou do limite").font(.footnote.weight(.semibold))
-                        Text("R$ 210,00 de R$ 180,00 em outubro").font(.caption).foregroundStyle(.secondary)
+                        Text("R$ 210,00 de R$ 180,00 em outubro").font(.caption).foregroundStyle(Color.secondary)
                     }
                     Spacer(minLength: 0)
                 }
@@ -153,7 +155,7 @@ private struct OnboardingArt: View {
                 .background(Color(hex: color), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             VStack(alignment: .leading, spacing: 1) {
                 Text(bank).font(.subheadline.weight(.semibold))
-                Text(value).font(.caption).foregroundStyle(.secondary)
+                Text(value).font(.caption).foregroundStyle(Color.secondary)
             }
         }
         .padding(12).background(Color.efSurface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
@@ -210,7 +212,7 @@ struct LoginView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     EFLogo(size: 56)
                     Text("Entrar").font(.sora(34, .bold, relativeTo: .largeTitle))
-                    Text("Use o mesmo e-mail e senha do e-Finances na web.").foregroundStyle(.secondary)
+                    Text("Use o mesmo e-mail e senha do e-Finances na web.").foregroundStyle(Color.secondary)
                     if vm.isDemo {
                         Tag("Demonstração: qualquer senha entra", symbol: "sparkles", color: .efInfo)
                     } else if !vm.envLabel.isEmpty {
@@ -221,7 +223,7 @@ struct LoginView: View {
 
                 VStack(spacing: 0) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("E-mail").font(.footnote).foregroundStyle(.secondary)
+                        Text("E-mail").font(.footnote).foregroundStyle(Color.secondary)
                         TextField("voce@exemplo.com", text: $vm.email)
                             .efEmailField()
                             .focused($focus, equals: .email)
@@ -231,7 +233,7 @@ struct LoginView: View {
                     .padding(.horizontal, 16).padding(.vertical, 12)
                     Divider().padding(.leading, 16)
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Senha").font(.footnote).foregroundStyle(.secondary)
+                        Text("Senha").font(.footnote).foregroundStyle(Color.secondary)
                         HStack {
                             Group {
                                 if showPassword { TextField("Sua senha", text: $vm.password) } else { SecureField("Sua senha", text: $vm.password) }
@@ -241,7 +243,7 @@ struct LoginView: View {
                             .submitLabel(.go)
                             .onSubmit { Task { await vm.submit() } }
                             Button { showPassword.toggle() } label: {
-                                Image(systemName: showPassword ? "eye.slash" : "eye").foregroundStyle(.secondary)
+                                Image(systemName: showPassword ? "eye.slash" : "eye").foregroundStyle(Color.secondary)
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel(showPassword ? "Esconder senha" : "Mostrar senha")
@@ -276,7 +278,7 @@ struct LoginView: View {
                 .disabled(vm.loading)
 
                 HStack(spacing: 4) {
-                    Text("Ainda não tem conta?").foregroundStyle(.secondary)
+                    Text("Ainda não tem conta?").foregroundStyle(Color.secondary)
                     Button("Criar conta") { path.append(.register) }.fontWeight(.semibold).foregroundStyle(Color.efTint)
                 }
                 .font(.subheadline)
@@ -314,7 +316,7 @@ struct RegisterView: View {
         @Bindable var vm = vm
         Form {
             Section {
-                Text("Comece pelo período grátis. Sem cartão de crédito.").foregroundStyle(.secondary).listRowBackground(Color.clear).listRowInsets(EdgeInsets())
+                Text("Comece pelo período grátis. Sem cartão de crédito.").foregroundStyle(Color.secondary).listRowBackground(Color.clear).listRowInsets(EdgeInsets())
             }
             Section {
                 field("Nome", text: $vm.firstName, error: vm.errors["firstName"]).efNameField()
@@ -376,7 +378,7 @@ struct RegisterDoneView: View {
             IconBadge(symbol: "envelope.badge", color: Color(hex: 0x059669), size: 84)
             Text("Confira seu e-mail").font(.sora(28, .bold, relativeTo: .title))
             (Text("Enviamos para ") + Text(email).bold() + Text(" o link para criar sua senha. Ele vale por 24 horas."))
-                .multilineTextAlignment(.center).foregroundStyle(.secondary).frame(maxWidth: 320)
+                .multilineTextAlignment(.center).foregroundStyle(Color.secondary).frame(maxWidth: 320)
             Spacer()
             #if os(iOS)
             if let mail = URL(string: "message://") {
@@ -418,7 +420,7 @@ struct ForgotPasswordView: View {
                         IconBadge(symbol: "envelope.badge", color: Color(hex: 0x059669), size: 64)
                         Text("Link enviado").font(.headline)
                         Text("Se houver uma conta com \(vm.email), o link para criar uma senha nova chega em instantes.")
-                            .font(.subheadline).multilineTextAlignment(.center).foregroundStyle(.secondary)
+                            .font(.subheadline).multilineTextAlignment(.center).foregroundStyle(Color.secondary)
                     }
                     .frame(maxWidth: .infinity).padding(.vertical, 12)
                 }

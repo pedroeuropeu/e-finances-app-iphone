@@ -48,7 +48,7 @@ private struct AccountsContent: View {
                                 IconBadge(symbol: "link", color: Color(hex: 0x059669), size: 40)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("Conectar um banco").foregroundStyle(Color.efInk).font(.body.weight(.semibold))
-                                    Text("Saldo e lançamentos entram sozinhos, só leitura.").font(.footnote).foregroundStyle(.secondary)
+                                    Text("Saldo e lançamentos entram sozinhos, só leitura.").font(.footnote).foregroundStyle(Color.secondary)
                                 }
                             }
                         }
@@ -80,11 +80,11 @@ private struct AccountsContent: View {
                                     Text(plural(s.subscriptions.count, "assinatura", "assinaturas")).foregroundStyle(Color.efInk)
                                     HStack(spacing: 3) {
                                         MoneyText(s.monthlyTotal, currency: s.currency, font: .footnote, color: .secondary)
-                                        Text("por mês, nos cartões e nos lançamentos").font(.footnote).foregroundStyle(.secondary)
+                                        Text("por mês, nos cartões e nos lançamentos").font(.footnote).foregroundStyle(Color.secondary)
                                     }
                                 }
                                 Spacer()
-                                Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+                                Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Color.efTertiary)
                             }
                         }
                     }
@@ -117,7 +117,7 @@ private struct AccountsContent: View {
             }
         }
         .sheet(isPresented: $connecting) { ConnectBankSheet() }
-        .sheet(item: $disconnectFor) { c in DisconnectSheet(connection: c, vm: vm) }
+        .sheet(item: $disconnectFor) { c in DisconnectSheet(connection: c, vm: vm).efToasts() }
         .confirmationDialog("Levar o \(companyFor?.bankName ?? "banco") para qual empresa?", isPresented: Binding(get: { companyFor != nil }, set: { if !$0 { companyFor = nil } }),
                             titleVisibility: .visible, presenting: companyFor) { c in
             ForEach(vm.state.value?.workspace?.companies ?? []) { co in
@@ -216,18 +216,16 @@ private struct AccountsContent: View {
                     if inUse { Tag("Em uso", color: .efTint) }
                 }
                 if a.kind == .credit, let available = a.availableCredit {
-                    HStack(spacing: 3) {
-                        Text("Disponível").font(.footnote).foregroundStyle(.secondary)
-                        MoneyText(available, currency: a.currency, font: .footnote, color: .secondary)
-                    }
+                    Text("Disponível \(app.settings.hideValues ? Money.hidden : Money.format(available, currency: a.currency))")
+                        .font(.footnote).foregroundStyle(Color.secondary).lineLimit(1).minimumScaleFactor(0.85)
                 } else {
-                    Text("Conta bancária").font(.footnote).foregroundStyle(.secondary)
+                    Text("Conta bancária").font(.footnote).foregroundStyle(Color.secondary)
                 }
             }
             Spacer(minLength: 6)
             VStack(alignment: .trailing, spacing: 0) {
                 MoneyText(a.headline, currency: a.currency, font: .subheadline.weight(.medium))
-                Text(a.kind == .credit ? "fatura" : "saldo").font(.caption2).foregroundStyle(.secondary)
+                Text(a.kind == .credit ? "fatura" : "saldo").font(.caption2).foregroundStyle(Color.secondary)
             }
         }
     }
@@ -243,7 +241,7 @@ private struct AccountsContent: View {
                         Text(account.name).foregroundStyle(Color.efInk).lineLimit(1)
                         if d.inUse(account.id) { Tag("Em uso", color: .efTint) }
                     }
-                    Text("\(company.name) · \(plural(Int(account.transactions), "lançamento", "lançamentos"))").font(.footnote).foregroundStyle(.secondary)
+                    Text("\(company.name) · \(plural(Int(account.transactions), "lançamento", "lançamentos"))").font(.footnote).foregroundStyle(Color.secondary)
                 }
                 Spacer(minLength: 6)
                 MoneyText(account.balance, currency: account.currency, font: .subheadline.weight(.medium))
@@ -316,7 +314,7 @@ struct ConnectBankSheet: View {
             SettingsIcon(symbol, Color(hex: 0x059669))
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(.body.weight(.semibold))
-                Text(text).font(.footnote).foregroundStyle(.secondary)
+                Text(text).font(.footnote).foregroundStyle(Color.secondary)
             }
         }
         .padding(.vertical, 2)
@@ -355,7 +353,7 @@ struct DisconnectSheet: View {
                                 VStack(alignment: .leading, spacing: 1) {
                                     Text(a.name).foregroundStyle(Color.efInk)
                                     HStack(spacing: 3) {
-                                        Text(a.kind == .credit ? "Cartão ·" : "Conta ·").font(.footnote).foregroundStyle(.secondary)
+                                        Text(a.kind == .credit ? "Cartão ·" : "Conta ·").font(.footnote).foregroundStyle(Color.secondary)
                                         MoneyText(a.headline, currency: a.currency, font: .footnote, color: .secondary)
                                     }
                                 }
@@ -401,7 +399,7 @@ struct DisconnectSheet: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title).foregroundStyle(value ? Color.efExpense : Color.efInk)
-                    Text(text).font(.footnote).foregroundStyle(.secondary)
+                    Text(text).font(.footnote).foregroundStyle(Color.secondary)
                 }
                 Spacer()
                 if remove == value { Image(systemName: "checkmark").fontWeight(.semibold).foregroundStyle(Color.efTint) }
@@ -488,7 +486,7 @@ private struct BankAccountContent: View {
 
                 Section {
                     if d.transactions.isEmpty {
-                        Text("Nada nos últimos \(vm.days) dias.").foregroundStyle(.secondary)
+                        Text("Nada nos últimos \(vm.days) dias.").foregroundStyle(Color.secondary)
                     }
                     ForEach(d.transactions) { t in
                         HStack(spacing: 12) {
@@ -497,7 +495,7 @@ private struct BankAccountContent: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(t.description).lineLimit(1)
                                 Text([DateFormats.dayMonth(t.date), t.categoryName, t.installment.map { "parcela \($0)" }].compactMap { $0 }.joined(separator: " · "))
-                                    .font(.footnote).foregroundStyle(.secondary).lineLimit(1)
+                                    .font(.footnote).foregroundStyle(Color.secondary).lineLimit(1)
                             }
                             Spacer(minLength: 6)
                             MoneyText(t.amount.magnitude, currency: d.account.currency, signedIncome: t.isIncome, font: .callout.weight(.medium),

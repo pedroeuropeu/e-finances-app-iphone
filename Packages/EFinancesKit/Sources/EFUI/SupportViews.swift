@@ -21,7 +21,7 @@ private struct HelpContentView: View {
                 Section {
                     if vm.results.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Nada encontrado para “\(vm.query)”.").foregroundStyle(.secondary)
+                            Text("Nada encontrado para “\(vm.query)”.").foregroundStyle(Color.secondary)
                             Button("Perguntar ao suporte") { newTicket = true }
                         }
                     }
@@ -37,9 +37,9 @@ private struct HelpContentView: View {
                     .pickerStyle(.segmented)
                     switch vm.tickets {
                     case .loading: ProgressView().frame(maxWidth: .infinity)
-                    case .failed(let e): Text(e.message).foregroundStyle(.secondary)
+                    case .failed(let e): Text(e.message).foregroundStyle(Color.secondary)
                     case .ready(let list):
-                        if list.isEmpty { Text(vm.group == .open ? "Nenhum chamado aberto." : "Nenhum chamado.").foregroundStyle(.secondary) }
+                        if list.isEmpty { Text(vm.group == .open ? "Nenhum chamado aberto." : "Nenhum chamado.").foregroundStyle(Color.secondary) }
                         ForEach(list) { t in
                             NavigationLink(value: Route.ticket(t.id)) { TicketRow(ticket: t) }
                         }
@@ -54,7 +54,7 @@ private struct HelpContentView: View {
                         } label: {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(topic.label)
-                                if let d = topic.description { Text(d).font(.footnote).foregroundStyle(.secondary).lineLimit(2) }
+                                if let d = topic.description { Text(d).font(.footnote).foregroundStyle(Color.secondary).lineLimit(2) }
                             }
                         }
                     }
@@ -68,7 +68,7 @@ private struct HelpContentView: View {
                             SettingsIcon("headphones", Color(hex: 0x0EA5E9))
                             VStack(alignment: .leading, spacing: 1) {
                                 Text("Falar com o suporte").foregroundStyle(Color.efInk)
-                                Text("Respondemos aqui e por e-mail").font(.footnote).foregroundStyle(.secondary)
+                                Text("Respondemos aqui e por e-mail").font(.footnote).foregroundStyle(Color.secondary)
                             }
                         }
                     }
@@ -89,7 +89,7 @@ private struct HelpContentView: View {
             NewTicketView { t in
                 Task { await vm.load() }
                 router.push(.ticket(t.id))
-            }
+            }.efToasts()
         }
         .task { if vm.tickets.value == nil { await vm.load() } }
     }
@@ -101,7 +101,7 @@ private struct TopicView: View {
 
     var body: some View {
         List {
-            if let d = topic.description { Section { Text(d).foregroundStyle(.secondary) } }
+            if let d = topic.description { Section { Text(d).foregroundStyle(Color.secondary) } }
             Section { ForEach(articles) { ArticleRow(article: $0) } }
         }
         .efGroupedList()
@@ -119,7 +119,7 @@ private struct ArticleRow: View {
         DisclosureGroup(isExpanded: $open) {
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(Array(article.body.enumerated()), id: \.offset) { _, p in
-                    Text(p).font(.subheadline).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+                    Text(p).font(.subheadline).foregroundStyle(Color.secondary).fixedSize(horizontal: false, vertical: true)
                 }
             }
             .padding(.vertical, 4)
@@ -141,7 +141,7 @@ private struct TicketRow: View {
                     if ticket.unread { Circle().fill(Color.efInfo).frame(width: 8, height: 8).accessibilityLabel("Resposta nova") }
                 }
                 Text([ticket.protocolNumber, (ticket.lastMessageAt ?? ticket.createdAt).map { DateFormats.api($0.date) }].compactMap { $0 }.joined(separator: " · "))
-                    .font(.footnote).foregroundStyle(.secondary)
+                    .font(.footnote).foregroundStyle(Color.secondary)
             }
             Spacer(minLength: 4)
             Tag(ticket.status.label, color: ticket.status == .waitingUser ? .efWarn : ticket.status.closed ? .secondary : .efInfo)
@@ -183,7 +183,7 @@ private struct TicketContent: View {
                     LazyVStack(spacing: 10) {
                         VStack(spacing: 4) {
                             Text(t.title).font(.headline).multilineTextAlignment(.center)
-                            Text("\(t.protocolNumber) · \(t.category?.label ?? "Chamado") · \(t.status.label)").font(.footnote).foregroundStyle(.secondary)
+                            Text("\(t.protocolNumber) · \(t.category?.label ?? "Chamado") · \(t.status.label)").font(.footnote).foregroundStyle(Color.secondary)
                         }
                         .padding(.vertical, 8)
                         ForEach(t.messages) { m in bubble(m).id(m.id) }
@@ -291,7 +291,7 @@ private struct NewTicketContent: View {
                             HStack {
                                 VStack(alignment: .leading, spacing: 1) {
                                     Text(c.label).foregroundStyle(Color.efInk)
-                                    Text(c.hint).font(.footnote).foregroundStyle(.secondary)
+                                    Text(c.hint).font(.footnote).foregroundStyle(Color.secondary)
                                 }
                                 Spacer()
                                 if vm.category == c { Image(systemName: "checkmark").fontWeight(.semibold).foregroundStyle(Color.efTint) }
@@ -355,12 +355,12 @@ private struct TestimonialRow: View {
                             Text("Seu depoimento").fontWeight(.semibold)
                             if let st = mine.status {
                                 Tag(st.label, color: st == .approved ? .efIncome : st == .pending ? .efWarn : .secondary)
-                                Text(st.hint).font(.footnote).foregroundStyle(.secondary)
+                                Text(st.hint).font(.footnote).foregroundStyle(Color.secondary)
                             }
                         } else {
                             Text("Está gostando do e-Finances?").fontWeight(.semibold)
                             Text("Conte em poucas palavras como ele ajuda você. Com a sua autorização, o depoimento pode aparecer no nosso site.")
-                                .font(.footnote).foregroundStyle(.secondary)
+                                .font(.footnote).foregroundStyle(Color.secondary)
                         }
                     }
                 }
@@ -375,7 +375,7 @@ private struct TestimonialRow: View {
             }
         }
         .task { if !vm.loaded { await vm.load() } }
-        .sheet(isPresented: $editing) { TestimonialSheet(vm: vm) }
+        .sheet(isPresented: $editing) { TestimonialSheet(vm: vm).efToasts() }
         .confirmationDialog("Retirar seu depoimento?", isPresented: $confirmWithdraw, titleVisibility: .visible) {
             Button("Retirar", role: .destructive) { Task { await vm.withdraw() } }
         } message: { Text("Ele sai do site na hora.") }

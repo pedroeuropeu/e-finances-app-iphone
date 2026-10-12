@@ -113,7 +113,7 @@ private struct TransactionsContent: View {
     private var headerSection: some View {
         Section {
             VStack(spacing: 14) {
-                Text("\(app.company?.name ?? "") · \(app.account?.name ?? "")").font(.subheadline).foregroundStyle(.secondary)
+                Text("\(app.company?.name ?? "") · \(app.account?.name ?? "")").font(.subheadline).foregroundStyle(Color.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 monthSelector
                 summary
@@ -154,9 +154,9 @@ private struct TransactionsContent: View {
         let t = vm.totals
         return HStack(alignment: .top, spacing: 0) {
             VStack(alignment: .leading, spacing: 3) {
-                Text("Resultado do mês").font(.caption).foregroundStyle(.secondary)
+                Text("Resultado do mês").font(.caption).foregroundStyle(Color.secondary)
                 MoneyText(t.result, font: .headline, color: t.result >= 0 ? .efIncome : .efExpense)
-                Text("recebido − pago").font(.caption2).foregroundStyle(.tertiary)
+                Text("recebido − pago").font(.caption2).foregroundStyle(Color.efTertiary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             Divider().frame(height: 44)
@@ -171,9 +171,9 @@ private struct TransactionsContent: View {
 
     private func pctTile(_ label: String, _ pct: Int, of total: Decimal) -> some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(label).font(.caption).foregroundStyle(.secondary)
+            Text(label).font(.caption).foregroundStyle(Color.secondary)
             Text("\(pct)%").font(.headline).monospacedDigit()
-            Text("de \(app.settings.hideValues ? "••••" : Money.compact(total, currency: app.currency))").font(.caption2).foregroundStyle(.tertiary)
+            Text("de \(app.settings.hideValues ? "••••" : Money.compact(total, currency: app.currency))").font(.caption2).foregroundStyle(Color.efTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 12)
@@ -223,11 +223,11 @@ private struct TransactionsContent: View {
                         Text("\(plural(vm.installmentsCount, "parcelamento", "parcelamentos")) em andamento").font(.subheadline.weight(.semibold)).foregroundStyle(Color.efInk)
                         HStack(spacing: 3) {
                             MoneyText(vm.installmentsMonthly, font: .footnote, color: .secondary)
-                            Text("por mês nos lançamentos").font(.footnote).foregroundStyle(.secondary)
+                            Text("por mês nos lançamentos").font(.footnote).foregroundStyle(Color.secondary)
                         }
                     }
                     Spacer()
-                    Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+                    Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Color.efTertiary)
                 }
                 .padding(12)
                 .background(Color.efSurface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
@@ -266,11 +266,12 @@ private struct TransactionsContent: View {
                 .buttonStyle(.plain)
                 .accessibilityAddTraits(selected ? .isSelected : [])
             } else {
-                NavigationLink(value: Route.transaction(t.id, t.date.yearMonth)) {
-                    TransactionRow(t, today: vm.today) { Task { await vm.togglePaid(t) } }
-                }
+                // link invisível atrás da linha: abre o detalhe sem a seta da lista (sobra espaço para a descrição)
+                TransactionRow(t, today: vm.today) { Task { await vm.togglePaid(t) } }
+                    .background { NavigationLink(value: Route.transaction(t.id, t.date.yearMonth)) { EmptyView() }.opacity(0) }
             }
         }
+        .listRowInsets(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
         .listRowBackground(Color.efSurface)
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
             if vm.manual && !vm.selecting {
@@ -284,7 +285,7 @@ private struct TransactionsContent: View {
             if !vm.selecting {
                 switch vm.mode {
                 case .manual:
-                    Button(role: .destructive) { delete(t) } label: { Label("Excluir", systemImage: "trash") }
+                    Button(role: .destructive) { delete(t) } label: { Label("Excluir", systemImage: "trash") }.tint(.efExpense)
                     Button { moreFor = t } label: { Label("Mais", systemImage: "ellipsis.circle") }.tint(.gray)
                 case .connected:
                     Button { router.edit(t) } label: { Label("Organizar", systemImage: "tag") }.tint(.efInfo)

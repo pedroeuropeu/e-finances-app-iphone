@@ -17,7 +17,7 @@ private struct ReportsContent: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: EFLayout.section) {
-                Text("\(app.company?.name ?? "") · \(vm.accountName)").font(.subheadline).foregroundStyle(.secondary).padding(.horizontal, EFLayout.gutter)
+                Text("\(app.company?.name ?? "") · \(vm.accountName)").font(.subheadline).foregroundStyle(Color.secondary).padding(.horizontal, EFLayout.gutter)
                 filters
                 LoadableContent(vm.state, retry: { await vm.load() }) { r in content(r) }
                     .frame(minHeight: vm.state.value == nil ? 300 : nil)
@@ -98,11 +98,11 @@ private struct ReportsContent: View {
                                     IconBadge(symbol: look.0, color: look.1, size: 36)
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(e.description).foregroundStyle(Color.efInk).lineLimit(1)
-                                        Text([e.date.map(DateFormats.api), e.category].compactMap { $0 }.joined(separator: " · ")).font(.footnote).foregroundStyle(.secondary)
+                                        Text([e.date.map(DateFormats.api), e.category].compactMap { $0 }.joined(separator: " · ")).font(.footnote).foregroundStyle(Color.secondary)
                                     }
                                     Spacer(minLength: 6)
                                     MoneyText(e.value, currency: r.currency, font: .subheadline.weight(.medium))
-                                    Image(systemName: "chevron.right").font(.caption.weight(.semibold)).foregroundStyle(.tertiary)
+                                    Image(systemName: "chevron.right").font(.caption.weight(.semibold)).foregroundStyle(Color.efTertiary)
                                 }
                                 .padding(.horizontal, 14).padding(.vertical, 10)
                             }
@@ -118,7 +118,7 @@ private struct ReportsContent: View {
     }
 
     private func legend(_ label: String, _ color: Color) -> some View {
-        HStack(spacing: 4) { Circle().fill(color).frame(width: 7, height: 7); Text(label).foregroundStyle(.secondary) }
+        HStack(spacing: 4) { Circle().fill(color).frame(width: 7, height: 7); Text(label).foregroundStyle(Color.secondary) }
     }
 
     // MARK: gastos por dia
@@ -168,7 +168,7 @@ private struct ReportsContent: View {
                 .pickerStyle(.segmented)
             }
             if shares.isEmpty {
-                Text("Nada no período.").foregroundStyle(.secondary).frame(maxWidth: .infinity).efCard()
+                Text("Nada no período.").foregroundStyle(Color.secondary).frame(maxWidth: .infinity).efCard()
             } else {
                 HStack(spacing: 18) {
                     DonutChart(slices, centerLabel: "Despesas", centerValue: app.settings.hideValues ? "••••" : Money.compact(total, currency: r.currency))
@@ -188,13 +188,13 @@ private struct ReportsContent: View {
                 VStack(spacing: 12) {
                     ForEach(Array(shares.prefix(6).enumerated()), id: \.element.id) { i, s in
                         HStack(spacing: 10) {
-                            Text("\(i + 1)").font(.subheadline.weight(.semibold)).foregroundStyle(.secondary).frame(width: 20)
+                            Text("\(i + 1)").font(.subheadline.weight(.semibold)).foregroundStyle(Color.secondary).frame(width: 20)
                             VStack(alignment: .leading, spacing: 6) {
                                 HStack {
                                     Text(s.name).lineLimit(1)
                                     Spacer()
                                     MoneyText(s.value, currency: r.currency, font: .subheadline.weight(.medium))
-                                    Text("\(s.percent)%").font(.caption).foregroundStyle(.secondary).frame(width: 36, alignment: .trailing)
+                                    Text("\(s.percent)%").font(.caption).foregroundStyle(Color.secondary).frame(width: 36, alignment: .trailing)
                                 }
                                 ProgressBar(Double(s.percent) / 100, color: slices.first { $0.label == s.name }?.color ?? .secondary)
                             }
@@ -245,7 +245,7 @@ private struct DaySheet: View {
     private func list(_ d: DayExpenses) -> some View {
         List {
             if d.items.isEmpty {
-                Text("Nenhuma despesa neste dia.").foregroundStyle(.secondary)
+                Text("Nenhuma despesa neste dia.").foregroundStyle(Color.secondary)
             }
             Section {
                 ForEach(d.items) { t in
@@ -257,7 +257,7 @@ private struct DaySheet: View {
                             CategoryBadge(t.category, size: 36, fallbackName: t.description)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(t.description).foregroundStyle(Color.efInk).lineLimit(1)
-                                Text((t.contact ?? t.category?.name ?? "") + (t.paid ? "" : " · em aberto")).font(.footnote).foregroundStyle(.secondary)
+                                Text((t.contact ?? t.category?.name ?? "") + (t.paid ? "" : " · em aberto")).font(.footnote).foregroundStyle(Color.secondary)
                             }
                             Spacer(minLength: 6)
                             MoneyText(t.value, font: .subheadline.weight(.medium))
@@ -369,11 +369,11 @@ private struct NotificationsContent: View {
                 SettingsIcon(symbol(n.category), color(n.severity))
                 VStack(alignment: .leading, spacing: 3) {
                     Text(n.title).fontWeight(n.read ? .regular : .semibold).foregroundStyle(Color.efInk)
-                    Text(n.body).font(.footnote).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+                    Text(n.body).font(.footnote).foregroundStyle(Color.secondary).fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 4)
                 VStack(alignment: .trailing, spacing: 6) {
-                    if let at = n.createdAt { Text(DateFormats.ago(at, now: vm.now)).font(.caption2).foregroundStyle(.secondary) }
+                    if let at = n.createdAt { Text(DateFormats.ago(at, now: vm.now)).font(.caption2).foregroundStyle(Color.secondary) }
                     if !n.read { Circle().fill(Color.efInfo).frame(width: 9, height: 9).accessibilityLabel("Não lida") }
                 }
             }

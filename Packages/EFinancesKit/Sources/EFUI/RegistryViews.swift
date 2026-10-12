@@ -47,11 +47,11 @@ private struct ContactsContent: View {
             case .failed(let e): Section { ErrorView(e) { await vm.load() } }.listRowBackground(Color.clear)
             case .ready(let d):
                 Section {
-                    if vm.filtered.isEmpty { Text("Nenhum contato encontrado.").foregroundStyle(.secondary) }
+                    if vm.filtered.isEmpty { Text("Nenhum contato encontrado.").foregroundStyle(Color.secondary) }
                     ForEach(vm.filtered) { c in
                         Button { showing = c } label: { row(c, d.debts) }
                             .swipeActions {
-                                Button(role: .destructive) { Task { _ = await vm.delete(c.contact) } } label: { Label("Excluir", systemImage: "trash") }
+                                Button(role: .destructive) { Task { _ = await vm.delete(c.contact) } } label: { Label("Excluir", systemImage: "trash") }.tint(.efExpense)
                                 Button { editing = ContactEdit(details: c) } label: { Label("Editar", systemImage: "pencil") }.tint(.efInfo)
                             }
                     }
@@ -71,7 +71,7 @@ private struct ContactsContent: View {
                 Button { editing = ContactEdit() } label: { Image(systemName: "plus") }.accessibilityLabel("Novo contato")
             }
         }
-        .sheet(item: $editing) { e in ContactEditor(vm: vm, details: e.details) }
+        .sheet(item: $editing) { e in ContactEditor(vm: vm, details: e.details).efToasts() }
         .sheet(item: $showing) { c in
             ContactCard(details: c, debts: vm.state.value?.debts, currency: vm.currency,
                         onEdit: { showing = nil; editing = ContactEdit(details: c) },
@@ -87,13 +87,13 @@ private struct ContactsContent: View {
             InitialsBadge(c.contact.name, color: c.contact.category?.color ?? .efInfo, size: 40)
             VStack(alignment: .leading, spacing: 2) {
                 Text(c.contact.name).foregroundStyle(Color.efInk).lineLimit(1)
-                Text([c.contact.category?.label, c.contact.phone].compactMap { $0 }.joined(separator: " · ")).font(.footnote).foregroundStyle(.secondary).lineLimit(1)
+                Text([c.contact.category?.label, c.contact.phone].compactMap { $0 }.joined(separator: " · ")).font(.footnote).foregroundStyle(Color.secondary).lineLimit(1)
             }
             Spacer(minLength: 6)
             if net != 0 {
                 VStack(alignment: .trailing, spacing: 0) {
                     MoneyText(net.magnitude, currency: vm.currency, font: .subheadline.weight(.medium), color: net > 0 ? .efIncome : .efExpense)
-                    Text(net > 0 ? "te deve" : "você deve").font(.caption2).foregroundStyle(.secondary)
+                    Text(net > 0 ? "te deve" : "você deve").font(.caption2).foregroundStyle(Color.secondary)
                 }
             }
         }
@@ -120,7 +120,7 @@ private struct ContactCard: View {
                     VStack(spacing: 8) {
                         InitialsBadge(c.name, color: c.category?.color ?? .efInfo, size: 76)
                         Text(c.name).font(.sora(22, .semibold, relativeTo: .title2)).multilineTextAlignment(.center)
-                        if let cat = c.category { Text(cat.label).foregroundStyle(.secondary) }
+                        if let cat = c.category { Text(cat.label).foregroundStyle(Color.secondary) }
                     }
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
@@ -146,7 +146,7 @@ private struct ContactCard: View {
                     if let owe = debts?.iOwe(c.id), owe > 0 {
                         LabeledContent("Você deve") { MoneyText(owe, currency: currency, color: .efExpense) }
                     }
-                    if let desc = details.description, !desc.isEmpty { Text(desc).foregroundStyle(.secondary) }
+                    if let desc = details.description, !desc.isEmpty { Text(desc).foregroundStyle(Color.secondary) }
                 }
                 Section {
                     Button(role: .destructive) { confirmDelete = true } label: { Label("Excluir contato", systemImage: "trash") }
@@ -280,12 +280,12 @@ private struct CostCentersContent: View {
             case .ready(let d):
                 let list = d.centers.filter { vm.showDefaults || !$0.systemDefault }
                 Section {
-                    if list.isEmpty { Text("Nenhum centro de custo ainda.").foregroundStyle(.secondary) }
+                    if list.isEmpty { Text("Nenhum centro de custo ainda.").foregroundStyle(Color.secondary) }
                     ForEach(list) { c in
                         Button { if !c.systemDefault { editing = CostCenterEdit(center: c) } } label: { row(c, d.usage[c.id]) }
                             .swipeActions {
                                 if !c.systemDefault {
-                                    Button(role: .destructive) { Task { _ = await vm.delete(c) } } label: { Label("Excluir", systemImage: "trash") }
+                                    Button(role: .destructive) { Task { _ = await vm.delete(c) } } label: { Label("Excluir", systemImage: "trash") }.tint(.efExpense)
                                 }
                             }
                     }
@@ -306,7 +306,7 @@ private struct CostCentersContent: View {
                 Button { editing = CostCenterEdit() } label: { Image(systemName: "plus") }.accessibilityLabel("Novo centro de custo")
             }
         }
-        .sheet(item: $editing) { e in CostCenterEditor(vm: vm, center: e.center) }
+        .sheet(item: $editing) { e in CostCenterEditor(vm: vm, center: e.center).efToasts() }
         .task { if vm.state.value == nil { await vm.load() } }
     }
 
@@ -320,10 +320,10 @@ private struct CostCentersContent: View {
                 VStack(alignment: .leading, spacing: 1) {
                     HStack(spacing: 4) {
                         Text(c.name).foregroundStyle(Color.efInk)
-                        if c.systemDefault { Image(systemName: "lock.fill").font(.caption2).foregroundStyle(.secondary) }
+                        if c.systemDefault { Image(systemName: "lock.fill").font(.caption2).foregroundStyle(Color.secondary) }
                     }
                     Text([c.description, plural(Int(u?.count ?? 0), "lançamento", "lançamentos")].compactMap { $0 }.joined(separator: " · "))
-                        .font(.footnote).foregroundStyle(.secondary).lineLimit(1)
+                        .font(.footnote).foregroundStyle(Color.secondary).lineLimit(1)
                 }
                 Spacer()
                 if let p {
@@ -335,7 +335,7 @@ private struct CostCentersContent: View {
                 ProgressBar(min(Double(p ?? 0) / 100, 1), color: color)
                 HStack(spacing: 3) {
                     MoneyText(spent, font: .caption, color: .secondary)
-                    Text("de").font(.caption).foregroundStyle(.secondary)
+                    Text("de").font(.caption).foregroundStyle(Color.secondary)
                     MoneyText(budget, font: .caption, color: .secondary)
                 }
             } else if spent > 0 {
@@ -374,7 +374,7 @@ private struct CostCenterEditor: View {
                     HStack {
                         Text("Orçamento por mês")
                         Spacer()
-                        Text("R$").foregroundStyle(.secondary)
+                        Text("R$").foregroundStyle(Color.secondary)
                         TextField("Opcional", text: $budget).efDecimalField().multilineTextAlignment(.trailing).frame(maxWidth: 130)
                     }
                 }
@@ -492,9 +492,9 @@ private struct CompaniesContent: View {
         }
         .sheet(item: $sheet) { s in
             switch s {
-            case .newCompany: CompanyEditor(vm: vm, company: nil)
-            case .editCompany(let c): CompanyEditor(vm: vm, company: c)
-            case .account(let c, let a): AccountEditor(vm: vm, company: c, account: a)
+            case .newCompany: CompanyEditor(vm: vm, company: nil).efToasts()
+            case .editCompany(let c): CompanyEditor(vm: vm, company: c).efToasts()
+            case .account(let c, let a): AccountEditor(vm: vm, company: c, account: a).efToasts()
             }
         }
         .task { if vm.state.value == nil { await vm.load() } }
@@ -508,7 +508,7 @@ private struct CompaniesContent: View {
                 AccountBadge(a, companyId: co.id)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(a.name).foregroundStyle(Color.efInk).lineLimit(1)
-                    Text("\(a.currency)\(a.defaultAccount ? " · padrão" : "") · \(modeText)").font(.footnote).foregroundStyle(.secondary)
+                    Text("\(a.currency)\(a.defaultAccount ? " · padrão" : "") · \(modeText)").font(.footnote).foregroundStyle(Color.secondary)
                 }
                 Spacer(minLength: 6)
                 MoneyText(a.balance, currency: a.currency, font: .subheadline.weight(.medium))
